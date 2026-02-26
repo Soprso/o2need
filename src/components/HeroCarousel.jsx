@@ -3,19 +3,29 @@ import { ChevronLeft, ChevronRight, Tag } from "lucide-react"
 
 const slides = [
     {
-        image: "/as/gardener.png",
+        image: "/as/1.jpg",
         heading: "Bring Nature Into Your Home",
         sub: "O2need curates premium indoor plants that transform your living space into a breathable sanctuary.",
     },
     {
-        image: "https://images.unsplash.com/photo-1545241047-6083a3684587?q=80&w=2000&auto=format&fit=crop",
+        image: "/as/2.jpg",
         heading: "Breathe Better, Live Better",
         sub: "Each plant is hand-picked for its air-purifying qualities and aesthetic appeal.",
     },
     {
-        image: "https://images.unsplash.com/photo-1463936575829-25148e1db1b8?q=80&w=2000&auto=format&fit=crop",
+        image: "/as/3.jpg",
         heading: "Premium Indoor Collection",
         sub: "Minimalist. Professional. Full of life. Discover plants that complement every space.",
+    },
+    {
+        image: "/as/4.jpg",
+        heading: "Your Garden, Our Expertise",
+        sub: "From setup to maintenance — we bring professional gardening services right to your doorstep.",
+    },
+    {
+        image: "/as/5.jpg",
+        heading: "Grow Fresh. Eat Fresh.",
+        sub: "Set up your own organic vegetable garden and pluck fresh produce every day.",
     },
 ]
 
