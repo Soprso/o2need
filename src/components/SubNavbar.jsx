@@ -6,11 +6,11 @@ const menuItems = [
     {
         label: 'Gardening Services',
         items: [
-            { label: 'Garden Design', href: '#' },
-            { label: 'Plant Installation', href: '#' },
-            { label: 'Garden Maintenance', href: '#' },
-            { label: 'Soil Treatment', href: '#' },
-            { label: 'Pest Control', href: '#' },
+            { label: 'Setup a New Garden', href: '/services/setup-new-garden' },
+            { label: 'Garden Makeover', href: '/services/garden-makeover' },
+            { label: 'Maintain Existing Garden', href: '/services/maintain-existing-garden' },
+            { label: 'Plants on Vacation', href: '/services/plants-on-vacation' },
+            { label: 'Pluck Your Own Vegetables', href: '/services/pluck-your-own-vegetables' },
         ],
     },
     {
