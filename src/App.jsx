@@ -20,6 +20,11 @@ import Cart from './pages/Cart'
 import Checkout from './pages/Checkout'
 import OrderConfirmation from './pages/OrderConfirmation'
 import OrderTracking from './pages/OrderTracking'
+import SetupNewGarden from './pages/Services/SetupNewGarden'
+import GardenMakeover from './pages/Services/GardenMakeover'
+import MaintainExistingGarden from './pages/Services/MaintainExistingGarden'
+import PlantsOnVacation from './pages/Services/PlantsOnVacation'
+import PluckYourOwnVegetables from './pages/Services/PluckYourOwnVegetables'
 import Dashboard from './pages/Admin/Dashboard'
 import AddProduct from './pages/Admin/AddProduct'
 
@@ -71,6 +76,13 @@ function App() {
                 <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
                 <Route path="/order-confirmation/:orderId" element={<ProtectedRoute><OrderConfirmation /></ProtectedRoute>} />
                 <Route path="/track/:orderId" element={<ProtectedRoute><OrderTracking /></ProtectedRoute>} />
+
+                {/* Gardening Services — Public */}
+                <Route path="/services/setup-new-garden" element={<SetupNewGarden />} />
+                <Route path="/services/garden-makeover" element={<GardenMakeover />} />
+                <Route path="/services/maintain-existing-garden" element={<MaintainExistingGarden />} />
+                <Route path="/services/plants-on-vacation" element={<PlantsOnVacation />} />
+                <Route path="/services/pluck-your-own-vegetables" element={<PluckYourOwnVegetables />} />
             </Route>
 
             <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
