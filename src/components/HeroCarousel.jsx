@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight, Tag } from "lucide-react"
 
 const slides = [
     {
@@ -30,6 +30,11 @@ const HeroCarousel = () => {
                 <div key={i} className={`absolute inset-0 transition-opacity duration-1000 ${i === current ? "opacity-100 z-10" : "opacity-0 z-0"}`}>
                     <img src={slide.image} alt={slide.heading} className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+                    {/* Discount tag top-right */}
+                    <div className="absolute top-4 right-4 z-30 bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-xl flex items-center gap-1.5 shadow-lg animate-pulse">
+                        <Tag className="w-3.5 h-3.5" /> Up to 40% OFF on Services
+                    </div>
+
                     <div className="absolute inset-0 flex items-center z-20 px-6 md:px-12">
                         <div className="max-w-lg text-white space-y-4 sm:space-y-6">
                             <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur rounded-full text-white font-medium text-xs sm:text-sm border border-white/30">
