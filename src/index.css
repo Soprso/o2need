@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-sans bg-background text-text;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
+
+.premium-card {
+  @apply bg-card rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300;
+}
+
+.btn-primary {
+  @apply bg-primary text-white px-6 py-2 rounded-lg font-medium hover:bg-secondary transition-colors duration-300;
+}
+
+.btn-secondary {
+  @apply border border-primary text-primary px-6 py-2 rounded-lg font-medium hover:bg-primary hover:text-white transition-all duration-300;
+}
