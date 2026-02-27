@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { productService } from "../services/productService"
 import ProductCard from "../components/ProductCard"
 import HeroCarousel from "../components/HeroCarousel"
+import WhyO2need from "../components/home/WhyO2need"
 import GardenAwareness from "../components/GardenAwareness"
 import FAQ from "../components/FAQ"
 import { Leaf, ShieldCheck, Truck, ArrowRight, Phone, Tag, Gift } from "lucide-react"
@@ -36,6 +37,8 @@ const Home = () => {
     return (
         <div>
             <HeroCarousel />
+
+            <WhyO2need />
 
             {/* Gardening Services */}
             <section className="py-16 bg-background">
