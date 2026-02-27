@@ -75,6 +75,12 @@ const Home = () => {
                                                 <Gift className="w-3 h-3" /> FREE for Members
                                             </div>
                                         )}
+                                        {/* FREE for Subscribers promo tag — shown to non-members on maintain card */}
+                                        {isMaintain && !showFree && (
+                                            <div className="absolute top-3 right-3 bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded-lg shadow-sm leading-tight text-center">
+                                                FREE for<br />Subscribers
+                                            </div>
+                                        )}
                                     </div>
                                     <div className="p-5 space-y-3">
                                         <h3 className="font-heading font-bold text-text text-base leading-snug group-hover:text-primary transition-colors">{service.title}</h3>
@@ -100,8 +106,8 @@ const Home = () => {
                                             <button
                                                 onClick={e => { e.stopPropagation(); window.location.href = 'tel:+918585003674' }}
                                                 className={`flex-1 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${showFree
-                                                        ? 'bg-[#14532d] hover:bg-[#166534] text-white'
-                                                        : 'bg-primary hover:bg-secondary text-white'
+                                                    ? 'bg-[#14532d] hover:bg-[#166534] text-white'
+                                                    : 'bg-primary hover:bg-secondary text-white'
                                                     }`}
                                             >
                                                 <Phone className="w-3.5 h-3.5" />
