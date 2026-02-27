@@ -71,7 +71,9 @@ const Navbar = () => {
 
                     {/* Logo */}
                     <Link to="/" className="flex-shrink-0 flex items-center">
-                        <img src="/as/logo.png" alt="O2need" className="h-16 w-auto object-contain" />
+                        <span className="font-heading font-black text-2xl tracking-tight text-text">
+                            O2<span className="text-secondary">need</span>
+                        </span>
                     </Link>
 
                     {/* Desktop Search Bar */}

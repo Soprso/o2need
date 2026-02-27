@@ -1,4 +1,5 @@
 import { CheckCircle2, XCircle, AlertTriangle, Leaf } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 const benefits = [
     'Prevents plant diseases', 'Promotes healthy growth',
@@ -27,9 +28,20 @@ const GardenAwareness = () => {
                 </div>
 
                 {/* Row 1 */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-8">
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.6, staggerChildren: 0.15 }}
+                    className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:gap-8"
+                >
                     {/* Importance */}
-                    <div className="bg-gradient-to-br from-primary to-[#1a6b38] text-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 space-y-4">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        className="bg-gradient-to-br from-primary to-[#1a6b38] text-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 space-y-4"
+                    >
                         <div className="bg-white/20 w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center">
                             <Leaf className="w-5 h-5 sm:w-6 sm:h-6" />
                         </div>
@@ -39,10 +51,15 @@ const GardenAwareness = () => {
                                 <li key={i} className="flex items-start gap-2"><span className="text-accent mt-0.5">→</span> {i}</li>
                             ))}
                         </ul>
-                    </div>
+                    </motion.div>
 
                     {/* Problems */}
-                    <div className="bg-red-50 border border-red-100 rounded-2xl sm:rounded-3xl p-6 sm:p-8 space-y-4">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        className="bg-red-50 border border-red-100 rounded-2xl sm:rounded-3xl p-6 sm:p-8 space-y-4"
+                    >
                         <div className="bg-red-100 w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center">
                             <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6 text-red-500" />
                         </div>
@@ -52,10 +69,15 @@ const GardenAwareness = () => {
                                 <li key={p} className="flex items-start gap-2"><XCircle className="w-4 h-4 mt-0.5 flex-shrink-0" /> {p}</li>
                             ))}
                         </ul>
-                    </div>
+                    </motion.div>
 
                     {/* Benefits */}
-                    <div className="bg-green-50 border border-green-100 rounded-2xl sm:rounded-3xl p-6 sm:p-8 space-y-4">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        className="bg-green-50 border border-green-100 rounded-2xl sm:rounded-3xl p-6 sm:p-8 space-y-4"
+                    >
                         <div className="bg-secondary/20 w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center">
                             <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-secondary" />
                         </div>
@@ -65,11 +87,17 @@ const GardenAwareness = () => {
                                 <li key={b} className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 mt-0.5 flex-shrink-0 text-secondary" /> {b}</li>
                             ))}
                         </ul>
-                    </div>
-                </div>
+                    </motion.div>
+                </motion.div>
 
                 {/* Row 2 */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.6, staggerChildren: 0.15 }}
+                    className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8"
+                >
                     <div className="bg-background rounded-2xl sm:rounded-3xl p-6 sm:p-8 space-y-4 border border-gray-100">
                         <h3 className="text-lg sm:text-xl font-heading font-bold text-text">🔧 Professional Maintenance Includes</h3>
                         <ul className="space-y-2.5">
@@ -97,7 +125,7 @@ const GardenAwareness = () => {
                             <p className="text-base sm:text-xl font-bold text-white/90 mt-2">More Oxygen • More Life</p>
                         </div>
                     </div>
-                </div>
+                </motion.div>
             </div>
         </section>
     )

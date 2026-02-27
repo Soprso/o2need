@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight, Tag } from "lucide-react"
 
 const slides = [
     {
-        image: "/as/gardener.png",
+        image: "/images/hero-premium.png",
         heading: "Bring Nature Into Your Home",
         sub: "O2need curates premium indoor plants that transform your living space into a breathable sanctuary.",
     },

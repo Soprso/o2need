@@ -49,7 +49,7 @@ const SubscribeModal = () => {
                     onClick={(e) => e.stopPropagation()}
                 >
                     {/* ── Header ── */}
-                    <div className="relative bg-gradient-to-br from-[#14532d] via-[#166534] to-[#15803d] px-8 pt-10 pb-12 flex-shrink-0 overflow-hidden">
+                    <div className="relative bg-gradient-to-br from-[#14532d] via-[#166534] to-[#15803d] px-8 pt-6 pb-8 flex-shrink-0 overflow-hidden">
                         <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-white/5 pointer-events-none" />
                         <div className="absolute top-6 right-24 w-20 h-20 rounded-full bg-white/5 pointer-events-none" />
                         <div className="absolute -bottom-8 -left-8 w-40 h-40 rounded-full bg-black/10 pointer-events-none" />
