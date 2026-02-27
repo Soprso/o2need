@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useCallback } from 'react'
-import { useUser } from '@clerk/clerk-react'
+import { useUser, useClerk } from '@clerk/clerk-react'
 
 const SubscriptionContext = createContext()
 export const useSubscription = () => useContext(SubscriptionContext)
@@ -93,7 +93,8 @@ export const MEMBERSHIP_PLANS = [
 // ─── Provider ─────────────────────────────────────────────────────────────────
 // step: null | 'plans' | 'details' | 'success' | 'perks'
 export const SubscriptionProvider = ({ children }) => {
-    const { user } = useUser()
+    const { user, isSignedIn } = useUser()
+    const { openSignIn } = useClerk()
 
     const [step, setStep] = useState(null)
     const [selectedPlan, setSelectedPlan] = useState(null)
@@ -112,9 +113,15 @@ export const SubscriptionProvider = ({ children }) => {
         setIsPaying(false)
     }, [])
     const openServiceDetails = useCallback((plan) => {
+        if (!isSignedIn) {
+            // Close the plans modal and open Clerk sign-in
+            setStep(null)
+            openSignIn()
+            return
+        }
         setSelectedPlan(plan)
         setStep('details')
-    }, [])
+    }, [isSignedIn, openSignIn])
     const goBackToPlans = useCallback(() => setStep('plans'), [])
 
     // ── Load Razorpay checkout.js script once ────────────────────────────
