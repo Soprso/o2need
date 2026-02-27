@@ -1,6 +1,6 @@
-import { SignedIn, SignedOut, SignInButton } from '@clerk/clerk-react'
+import { SignedIn, SignedOut, SignInButton, useUser, useClerk } from '@clerk/clerk-react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Menu, X, Search, Sparkles, Crown } from 'lucide-react'
+import { Menu, X, Search, Sparkles, Crown, User, ShoppingBag, Heart, Bell, Settings, HelpCircle, LogOut, ChevronRight } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
 import { allStaticProducts } from '../data/products'
 import UserDropdown from './UserDropdown'
@@ -10,6 +10,8 @@ import { useSubscription } from '../context/SubscriptionContext'
 const Navbar = () => {
     const navigate = useNavigate()
     const { openModal, openPerksModal, userSubscription } = useSubscription()
+    const { user } = useUser()
+    const { signOut } = useClerk()
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
     const [searchResults, setSearchResults] = useState([])
@@ -217,7 +219,44 @@ const Navbar = () => {
                             </SignInButton>
                         </SignedOut>
                         <SignedIn>
-                            <UserDropdown />
+                            {/* Mobile inline user menu — no nested floating dropdown */}
+                            <div className="rounded-2xl border border-gray-100 overflow-hidden">
+                                {/* User header */}
+                                <div className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-primary/5 to-secondary/5 border-b border-gray-100">
+                                    <div className="w-10 h-10 rounded-full bg-primary/10 border-2 border-primary/20 overflow-hidden flex items-center justify-center flex-shrink-0">
+                                        {user?.imageUrl
+                                            ? <img src={user.imageUrl} alt={user.firstName} className="w-full h-full object-cover" />
+                                            : <User className="w-5 h-5 text-primary" />
+                                        }
+                                    </div>
+                                    <div className="min-w-0">
+                                        <p className="font-bold text-text text-sm truncate">{user?.fullName || user?.firstName}</p>
+                                        <p className="text-xs text-subtext truncate">{user?.primaryEmailAddress?.emailAddress}</p>
+                                    </div>
+                                </div>
+                                {/* Nav links */}
+                                {[
+                                    { icon: User, label: 'My Profile', href: '/profile' },
+                                    { icon: ShoppingBag, label: 'Order History', href: '/orders' },
+                                    { icon: Heart, label: 'Wishlist', href: '/wishlist' },
+                                    { icon: Bell, label: 'Notifications', href: '/notifications' },
+                                    { icon: Settings, label: 'Settings', href: '/settings' },
+                                    { icon: HelpCircle, label: 'Help & Support', href: '/contact' },
+                                ].map(({ icon: Icon, label, href }) => (
+                                    <Link key={href} to={href} onClick={() => setIsMenuOpen(false)}
+                                        className="flex items-center justify-between px-4 py-3 text-sm text-subtext hover:text-primary hover:bg-green-50 border-b border-gray-50 transition-colors">
+                                        <span className="flex items-center gap-3">
+                                            <Icon className="w-4 h-4" />{label}
+                                        </span>
+                                        <ChevronRight className="w-3.5 h-3.5" />
+                                    </Link>
+                                ))}
+                                {/* Logout */}
+                                <button onClick={() => { signOut(); setIsMenuOpen(false) }}
+                                    className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors font-medium">
+                                    <LogOut className="w-4 h-4" /> Logout
+                                </button>
+                            </div>
                         </SignedIn>
                     </div>
                 </div>
