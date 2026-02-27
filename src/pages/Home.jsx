@@ -6,7 +6,7 @@ import WhyO2need from "../components/home/WhyO2need"
 import GardenAwareness from "../components/GardenAwareness"
 import LeafLoader from "../components/LeafLoader"
 import FAQ from "../components/FAQ"
-import { AnimatePresence } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 import { Leaf, ShieldCheck, Truck, ArrowRight, Phone, Tag, Gift } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
 import { allStaticProducts } from "../data/products"
@@ -61,12 +61,21 @@ const Home = () => {
                         </Link>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-50px" }}
+                        transition={{ duration: 0.6, staggerChildren: 0.1 }}
+                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"
+                    >
                         {gardeningServices.map(service => {
                             const isMaintain = service.id === 'maintain-existing-garden'
                             const showFree = isMaintain && isSignedIn && !!userSubscription
                             return (
-                                <div
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
                                     key={service.id}
                                     onClick={() => navigate(service.slug)}
                                     className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
@@ -128,10 +137,10 @@ const Home = () => {
                                             </button>
                                         </div>
                                     </div>
-                                </div>
+                                </motion.div>
                             )
                         })}
-                    </div>
+                    </motion.div>
                 </div>
             </section>
 
@@ -152,9 +161,15 @@ const Home = () => {
                             {[1, 2, 3, 4].map(n => <div key={n} className="h-64 sm:h-96 bg-white rounded-xl animate-pulse" />)}
                         </div>
                     ) : (
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-8">
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-50px" }}
+                            transition={{ duration: 0.6 }}
+                            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-8"
+                        >
                             {displayProducts.slice(0, 8).map(p => <ProductCard key={p.id} product={p} />)}
-                        </div>
+                        </motion.div>
                     )}
                 </div>
             </section>
@@ -171,31 +186,48 @@ const Home = () => {
                             View All <ArrowRight className="w-4 h-4" />
                         </Link>
                     </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-50px" }}
+                        transition={{ duration: 0.6 }}
+                        className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6"
+                    >
                         {allStaticProducts.filter(p => p.category === 'fertilizer').map(p => (
                             <ProductCard key={p.id} product={p} />
                         ))}
-                    </div>
+                    </motion.div>
                 </div>
             </section>
 
             {/* Features Strip */}
             <section className="py-16 bg-white">
-                <div className="container mx-auto px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12">
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.6, staggerChildren: 0.1 }}
+                    className="container mx-auto px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12"
+                >
                     {[
                         { icon: Leaf, title: "Eco Friendly", desc: "100% organic soil and sustainable packaging." },
                         { icon: Truck, title: "Fast Delivery", desc: "Carefully packed and delivered within 48 hours." },
                         { icon: ShieldCheck, title: "Quality Check", desc: "Every plant passes a 5-point health check." }
                     ].map((f, i) => (
-                        <div key={i} className="flex flex-col items-center text-center space-y-3">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            key={i} className="flex flex-col items-center text-center space-y-3"
+                        >
                             <div className="bg-background p-4 rounded-2xl border border-gray-100">
                                 <f.icon className="w-7 h-7 text-primary" />
                             </div>
                             <h3 className="text-lg font-heading font-bold text-text">{f.title}</h3>
                             <p className="text-subtext text-sm max-w-xs">{f.desc}</p>
-                        </div>
+                        </motion.div>
                     ))}
-                </div>
+                </motion.div>
             </section>
 
             <GardenAwareness />
