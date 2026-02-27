@@ -1,6 +1,6 @@
 import { SignedIn, SignedOut, SignInButton } from '@clerk/clerk-react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Menu, X, Search, Sparkles } from 'lucide-react'
+import { Menu, X, Search, Sparkles, Crown } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
 import { allStaticProducts } from '../data/products'
 import UserDropdown from './UserDropdown'
@@ -9,7 +9,7 @@ import { useSubscription } from '../context/SubscriptionContext'
 
 const Navbar = () => {
     const navigate = useNavigate()
-    const { openModal } = useSubscription()
+    const { openModal, openPerksModal, userSubscription } = useSubscription()
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
     const [searchResults, setSearchResults] = useState([])
@@ -100,14 +100,24 @@ const Navbar = () => {
                         <Link to="/plants" className="text-text hover:text-primary transition-colors">Plants</Link>
                         <Link to="/about" className="text-text hover:text-primary transition-colors">About</Link>
                         <Link to="/contact" className="text-text hover:text-primary transition-colors">Contact</Link>
-                        {/* Subscribe Button */}
-                        <button
-                            onClick={openModal}
-                            className="flex items-center gap-1.5 bg-gradient-to-r from-[#14532d] to-[#166534] hover:from-[#166534] hover:to-[#15803d] text-white text-sm font-semibold px-4 py-2 rounded-full shadow-md hover:shadow-lg hover:shadow-green-900/20 transition-all duration-300 active:scale-95"
-                        >
-                            <Sparkles className="w-4 h-4" />
-                            Subscribe
-                        </button>
+                        {/* Subscribe / Membership Perks Button */}
+                        {userSubscription ? (
+                            <button
+                                onClick={openPerksModal}
+                                className="flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-[#22c55e] hover:from-amber-600 hover:to-[#16a34a] text-white text-sm font-semibold px-4 py-2 rounded-full shadow-md hover:shadow-lg transition-all duration-300 active:scale-95"
+                            >
+                                <Crown className="w-4 h-4 fill-white" />
+                                Membership Perks
+                            </button>
+                        ) : (
+                            <button
+                                onClick={openModal}
+                                className="flex items-center gap-1.5 bg-gradient-to-r from-[#14532d] to-[#166534] hover:from-[#166534] hover:to-[#15803d] text-white text-sm font-semibold px-4 py-2 rounded-full shadow-md hover:shadow-lg hover:shadow-green-900/20 transition-all duration-300 active:scale-95"
+                            >
+                                <Sparkles className="w-4 h-4" />
+                                Subscribe
+                            </button>
+                        )}
                     </div>
 
                     {/* Right Controls */}
@@ -182,14 +192,24 @@ const Navbar = () => {
                     {[['/', 'Home'], ['/plants', 'Plants'], ['/fertilizers', 'Fertilizers'], ['/blogs', 'Blogs'], ['/about', 'About'], ['/contact', 'Contact']].map(([to, label]) => (
                         <Link key={to} to={to} className="block text-text font-medium" onClick={() => setIsMenuOpen(false)}>{label}</Link>
                     ))}
-                    {/* Mobile Subscribe Button */}
-                    <button
-                        onClick={() => { openModal(); setIsMenuOpen(false) }}
-                        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#14532d] to-[#166534] text-white font-semibold py-3 rounded-xl shadow-md transition-all duration-300 active:scale-95"
-                    >
-                        <Sparkles className="w-4 h-4" />
-                        Subscribe
-                    </button>
+                    {/* Mobile Subscribe / Membership Perks Button */}
+                    {userSubscription ? (
+                        <button
+                            onClick={() => { openPerksModal(); setIsMenuOpen(false) }}
+                            className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-[#22c55e] hover:from-amber-600 hover:to-[#16a34a] text-white font-semibold py-3 rounded-xl shadow-md transition-all duration-300 active:scale-95"
+                        >
+                            <Crown className="w-4 h-4 fill-white" />
+                            Membership Perks
+                        </button>
+                    ) : (
+                        <button
+                            onClick={() => { openModal(); setIsMenuOpen(false) }}
+                            className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#14532d] to-[#166534] text-white font-semibold py-3 rounded-xl shadow-md transition-all duration-300 active:scale-95"
+                        >
+                            <Sparkles className="w-4 h-4" />
+                            Subscribe
+                        </button>
+                    )}
                     <div className="pt-2 border-t border-gray-100">
                         <SignedOut>
                             <SignInButton mode="modal">

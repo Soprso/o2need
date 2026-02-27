@@ -3,6 +3,7 @@ import SubNavbar from "../components/SubNavbar"
 import SubscribeModal from "../components/SubscribeModal"
 import ServiceDetailsModal from "../components/ServiceDetailsModal"
 import SuccessModal from "../components/SuccessModal"
+import MembershipPerksModal from "../components/MembershipPerksModal"
 import { Outlet, Link } from "react-router-dom"
 import { Leaf } from "lucide-react"
 
@@ -13,6 +14,7 @@ const MainLayout = () => (
         <SubscribeModal />
         <ServiceDetailsModal />
         <SuccessModal />
+        <MembershipPerksModal />
         <main className="flex-grow">
             <Outlet />
         </main>

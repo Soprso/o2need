@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useCallback } from 'react'
+import { useUser } from '@clerk/clerk-react'
 
 const SubscriptionContext = createContext()
 export const useSubscription = () => useContext(SubscriptionContext)
@@ -89,34 +90,34 @@ export const MEMBERSHIP_PLANS = [
     },
 ]
 
-// modal steps: null | 'plans' | 'details' | 'loading' | 'success'
-
 // ─── Provider ─────────────────────────────────────────────────────────────────
+// step: null | 'plans' | 'details' | 'success' | 'perks'
 export const SubscriptionProvider = ({ children }) => {
-    const [step, setStep] = useState(null)        // null | 'plans' | 'details' | 'success'
+    const { user } = useUser()
+
+    const [step, setStep] = useState(null)
     const [selectedPlan, setSelectedPlan] = useState(null)
     const [isPaying, setIsPaying] = useState(false)
 
-    // Open the plans picker modal
-    const openModal = useCallback(() => setStep('plans'), [])
+    // ── Derived subscription data from Clerk metadata ──────────────────────
+    const userSubscription = user?.unsafeMetadata?.subscription ?? null
+    const visitsLeft = user?.unsafeMetadata?.visitsLeft ?? 0
 
-    // Close everything
+    // ── Modal navigation ───────────────────────────────────────────────────
+    const openModal = useCallback(() => setStep('plans'), [])
+    const openPerksModal = useCallback(() => setStep('perks'), [])
     const closeAll = useCallback(() => {
         setStep(null)
         setSelectedPlan(null)
         setIsPaying(false)
     }, [])
-
-    // Called from SubscriptionCard → open Service Details modal
     const openServiceDetails = useCallback((plan) => {
         setSelectedPlan(plan)
         setStep('details')
     }, [])
-
-    // Go back from Service Details to Plans
     const goBackToPlans = useCallback(() => setStep('plans'), [])
 
-    // ── Load Razorpay checkout.js script once ─────────────────────────────────
+    // ── Load Razorpay checkout.js script once ────────────────────────────
     const loadRazorpayScript = () =>
         new Promise((resolve) => {
             if (document.getElementById('razorpay-script')) { resolve(true); return }
@@ -128,7 +129,7 @@ export const SubscriptionProvider = ({ children }) => {
             document.body.appendChild(script)
         })
 
-    // ── Real Razorpay integration ─────────────────────────────────────────────
+    // ── Real Razorpay integration + Clerk metadata save ──────────────────
     const handlePayment = useCallback(async (plan, contactPhone) => {
         setIsPaying(true)
 
@@ -141,14 +142,42 @@ export const SubscriptionProvider = ({ children }) => {
 
         const options = {
             key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-            amount: plan.price * 100,          // paise
+            amount: plan.price * 100,
             currency: 'INR',
             name: 'O2need',
             description: `${plan.name} — ${plan.visitsLabel}`,
             image: '/as/logo.png',
-            handler: (response) => {
-                // payment.id guarantees server-side verification later
+            handler: async (response) => {
                 console.log('Razorpay payment success:', response.razorpay_payment_id)
+
+                // ── Save subscription to Clerk unsafeMetadata ──────────
+                if (user) {
+                    const subscriptionData = {
+                        planId: plan.id,
+                        planName: plan.name,
+                        price: plan.price,
+                        period: plan.period,
+                        visits: plan.visits,
+                        visitsLabel: plan.visitsLabel,
+                        features: plan.features,
+                        purchasedAt: new Date().toISOString(),
+                        paymentId: response.razorpay_payment_id,
+                    }
+                    try {
+                        await user.update({
+                            unsafeMetadata: {
+                                ...user.unsafeMetadata,
+                                subscription: subscriptionData,
+                                visitsLeft: plan.visits,
+                                phone: contactPhone || '',
+                            },
+                        })
+                        console.log('Subscription saved to Clerk metadata')
+                    } catch (err) {
+                        console.error('Failed to save to Clerk metadata:', err)
+                    }
+                }
+
                 setIsPaying(false)
                 setStep('success')
             },
@@ -159,9 +188,7 @@ export const SubscriptionProvider = ({ children }) => {
                 plan_id: plan.id,
                 plan_name: plan.name,
             },
-            theme: {
-                color: '#14532d',
-            },
+            theme: { color: '#14532d' },
             modal: {
                 ondismiss: () => {
                     console.log('Razorpay checkout closed by user')
@@ -177,8 +204,8 @@ export const SubscriptionProvider = ({ children }) => {
             setIsPaying(false)
         })
         rzp.open()
-    }, [])
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user])
 
     return (
         <SubscriptionContext.Provider
@@ -187,7 +214,10 @@ export const SubscriptionProvider = ({ children }) => {
                 selectedPlan,
                 isPaying,
                 plans: MEMBERSHIP_PLANS,
+                userSubscription,
+                visitsLeft,
                 openModal,
+                openPerksModal,
                 closeAll,
                 openServiceDetails,
                 goBackToPlans,

@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { gardeningServices } from '../data/gardeningServices'
+import { useUser } from '@clerk/clerk-react'
+import { useSubscription } from '../context/SubscriptionContext'
 import {
     ChevronLeft, ChevronRight, Phone, MessageCircle,
-    CheckCircle, Tag, Sparkles, ArrowRight
+    CheckCircle, Tag, Sparkles, ArrowRight, Gift,
 } from 'lucide-react'
 
 const PHONE = '+918585003674'
@@ -41,8 +43,13 @@ const Carousel = ({ images }) => {
     )
 }
 
-const GardeningServicePage = ({ service }) => {
+const GardeningServicePage = ({ service, isMaintain = false }) => {
     const others = gardeningServices.filter(s => s.id !== service.id)
+    const { user } = useUser()
+    const { userSubscription, visitsLeft } = useSubscription()
+
+    // Show FREE UI only for logged-in subscribed users on the Maintain page
+    const showFreeUI = isMaintain && !!user && !!userSubscription
 
     const handleCall = () => window.location.href = `tel:${PHONE}`
     const handleWhatsApp = () => window.open(
@@ -67,10 +74,13 @@ const GardeningServicePage = ({ service }) => {
 
                     {/* Header */}
                     <div className="space-y-3">
+                        {/* Tags row — hide discount tag for subscribed maintain users */}
                         <div className="flex flex-wrap items-center gap-2">
-                            <span className="bg-accent/20 text-amber-700 border border-amber-200 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
-                                <Tag className="w-3 h-3" /> {service.discount}
-                            </span>
+                            {!showFreeUI && (
+                                <span className="bg-accent/20 text-amber-700 border border-amber-200 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+                                    <Tag className="w-3 h-3" /> {service.discount}
+                                </span>
+                            )}
                             <span className="bg-secondary/10 text-secondary text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
                                 <Sparkles className="w-3 h-3" /> Most Popular
                             </span>
@@ -78,12 +88,24 @@ const GardeningServicePage = ({ service }) => {
                         <h1 className="text-3xl sm:text-4xl font-heading font-bold text-primary leading-tight">{service.title}</h1>
                         <p className="text-subtext text-base sm:text-lg italic">{service.tagline}</p>
 
-                        {/* Price */}
-                        <div className="flex items-baseline gap-3">
-                            <span className="text-3xl sm:text-4xl font-heading font-bold text-primary">₹{service.price.toLocaleString()}</span>
-                            <span className="text-base text-subtext line-through">₹{service.originalPrice.toLocaleString()}</span>
-                            <span className="text-secondary font-bold text-sm bg-secondary/10 px-2.5 py-0.5 rounded-lg">{service.discount}</span>
-                        </div>
+                        {/* Price — show FREE for subscribed users on maintain page */}
+                        {showFreeUI ? (
+                            <div className="flex flex-wrap items-baseline gap-3">
+                                <span className="inline-flex items-center gap-2 bg-[#14532d] text-white text-2xl font-heading font-bold px-5 py-2 rounded-2xl shadow-lg shadow-green-900/20">
+                                    <Gift className="w-5 h-5" />
+                                    FREE
+                                </span>
+                                <span className="text-[#14532d] font-bold text-lg">
+                                    {visitsLeft} visit{visitsLeft !== 1 ? 's' : ''} remaining
+                                </span>
+                            </div>
+                        ) : (
+                            <div className="flex items-baseline gap-3">
+                                <span className="text-3xl sm:text-4xl font-heading font-bold text-primary">₹{service.price.toLocaleString()}</span>
+                                <span className="text-base text-subtext line-through">₹{service.originalPrice.toLocaleString()}</span>
+                                <span className="text-secondary font-bold text-sm bg-secondary/10 px-2.5 py-0.5 rounded-lg">{service.discount}</span>
+                            </div>
+                        )}
 
                         {/* CTA Buttons */}
                         <div className="flex flex-col sm:flex-row gap-3 pt-2">
