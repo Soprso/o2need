@@ -64,7 +64,10 @@ const CrmPayouts = () => {
         // Group by month for chart
         const grouped = {}
         allVisits.forEach(v => {
+            if (!v.date) return
             const d = new Date(v.date)
+            if (isNaN(d.getTime())) return // Skip invalid dates
+
             const key = d.toLocaleString('default', { month: 'short', year: '2-digit' })
             if (!grouped[key]) grouped[key] = { name: key, visits: 0, payout: 0, material: 0 }
             grouped[key].visits++
