@@ -1,5 +1,8 @@
 import Navbar from "../components/Navbar"
 import SubNavbar from "../components/SubNavbar"
+import SubscribeModal from "../components/SubscribeModal"
+import ServiceDetailsModal from "../components/ServiceDetailsModal"
+import SuccessModal from "../components/SuccessModal"
 import { Outlet, Link } from "react-router-dom"
 import { Leaf } from "lucide-react"
 
@@ -7,6 +10,9 @@ const MainLayout = () => (
     <div className="min-h-screen flex flex-col">
         <Navbar />
         <SubNavbar />
+        <SubscribeModal />
+        <ServiceDetailsModal />
+        <SuccessModal />
         <main className="flex-grow">
             <Outlet />
         </main>

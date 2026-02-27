@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { ClerkProvider } from '@clerk/clerk-react'
 import { CartProvider } from './context/CartContext'
+import { SubscriptionProvider } from './context/SubscriptionContext'
 import App from './App.jsx'
 import './index.css'
 
@@ -21,9 +22,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             afterSignOutUrl="/"
         >
             <BrowserRouter>
-                <CartProvider>
-                    <App />
-                </CartProvider>
+                <SubscriptionProvider>
+                    <CartProvider>
+                        <App />
+                    </CartProvider>
+                </SubscriptionProvider>
             </BrowserRouter>
         </ClerkProvider>
     </React.StrictMode>,
