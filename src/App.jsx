@@ -27,6 +27,7 @@ import PlantsOnVacation from './pages/Services/PlantsOnVacation'
 import PluckYourOwnVegetables from './pages/Services/PluckYourOwnVegetables'
 import Dashboard from './pages/Admin/Dashboard'
 import AddProduct from './pages/Admin/AddProduct'
+import AdminPanel from './pages/Admin/AdminPanel'
 
 const Loader = () => (
     <div className="h-screen flex items-center justify-center">
@@ -89,6 +90,9 @@ function App() {
                 <Route index element={<Dashboard />} />
                 <Route path="add" element={<AddProduct />} />
             </Route>
+
+            {/* Standalone — password-protected admin panel (no nav link) */}
+            <Route path="/o2need-control" element={<AdminPanel />} />
 
             <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
