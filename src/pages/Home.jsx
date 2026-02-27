@@ -4,7 +4,9 @@ import ProductCard from "../components/ProductCard"
 import HeroCarousel from "../components/HeroCarousel"
 import WhyO2need from "../components/home/WhyO2need"
 import GardenAwareness from "../components/GardenAwareness"
+import LeafLoader from "../components/LeafLoader"
 import FAQ from "../components/FAQ"
+import { AnimatePresence } from "framer-motion"
 import { Leaf, ShieldCheck, Truck, ArrowRight, Phone, Tag, Gift } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
 import { allStaticProducts } from "../data/products"
@@ -13,6 +15,7 @@ import { useUser } from "@clerk/clerk-react"
 import { useSubscription } from "../context/SubscriptionContext"
 
 const Home = () => {
+    const [pageLoad, setPageLoad] = useState(true)
     const [dbProducts, setDbProducts] = useState([])
     const [loading, setLoading] = useState(true)
     const navigate = useNavigate()
@@ -36,6 +39,10 @@ const Home = () => {
 
     return (
         <div>
+            <AnimatePresence>
+                {pageLoad && <LeafLoader onComplete={() => setPageLoad(false)} />}
+            </AnimatePresence>
+
             <HeroCarousel />
 
             <WhyO2need />
