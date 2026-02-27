@@ -10,6 +10,12 @@ const ProductCard = ({ product }) => {
                     alt={product.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
+                {/* Coming Soon badge */}
+                <div className="absolute top-3 left-3">
+                    <span className="bg-red-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg shadow-sm tracking-wide uppercase">
+                        Coming Soon
+                    </span>
+                </div>
                 <div className="absolute top-3 right-3">
                     <span className="bg-white/90 backdrop-blur px-2.5 py-1 rounded-full text-xs font-bold text-primary shadow-sm">
                         ₹{product.price}
