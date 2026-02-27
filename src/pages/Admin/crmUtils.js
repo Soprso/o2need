@@ -11,13 +11,19 @@ export const adminFetch = (path, opts = {}) =>
         headers: { 'x-admin-token': ADMIN_TOKEN, 'Content-Type': 'application/json', ...(opts.headers || {}) },
     })
 
-export const fmt = (ts) => ts
-    ? new Date(ts).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
-    : '—'
+export const fmt = (ts) => {
+    if (!ts) return '—'
+    const d = new Date(ts)
+    if (isNaN(d.getTime())) return '—'
+    return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+}
 
-export const fmtTime = (ts) => ts
-    ? new Date(ts).toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
-    : '—'
+export const fmtTime = (ts) => {
+    if (!ts) return '—'
+    const d = new Date(ts)
+    if (isNaN(d.getTime())) return '—'
+    return d.toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+}
 
 export const CATEGORIES = [
     { value: 'indoor', label: 'Indoor Plants' },
