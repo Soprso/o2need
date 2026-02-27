@@ -4,15 +4,19 @@ import ProductCard from "../components/ProductCard"
 import HeroCarousel from "../components/HeroCarousel"
 import GardenAwareness from "../components/GardenAwareness"
 import FAQ from "../components/FAQ"
-import { Leaf, ShieldCheck, Truck, ArrowRight, Phone, Tag } from "lucide-react"
+import { Leaf, ShieldCheck, Truck, ArrowRight, Phone, Tag, Gift } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
 import { allStaticProducts } from "../data/products"
 import { gardeningServices } from "../data/gardeningServices"
+import { useUser } from "@clerk/clerk-react"
+import { useSubscription } from "../context/SubscriptionContext"
 
 const Home = () => {
     const [dbProducts, setDbProducts] = useState([])
     const [loading, setLoading] = useState(true)
     const navigate = useNavigate()
+    const { isSignedIn } = useUser()
+    const { userSubscription, visitsLeft } = useSubscription()
 
     useEffect(() => { fetchProducts() }, [])
 
@@ -48,44 +52,69 @@ const Home = () => {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-                        {gardeningServices.map(service => (
-                            <div
-                                key={service.id}
-                                onClick={() => navigate(service.slug)}
-                                className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
-                            >
-                                <div className="relative overflow-hidden h-44 sm:h-52">
-                                    <img src={service.images[0]} alt={service.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                    <div className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 shadow-sm">
-                                        <Tag className="w-3 h-3" /> {service.discount}
+                        {gardeningServices.map(service => {
+                            const isMaintain = service.id === 'maintain-existing-garden'
+                            const showFree = isMaintain && isSignedIn && !!userSubscription
+                            return (
+                                <div
+                                    key={service.id}
+                                    onClick={() => navigate(service.slug)}
+                                    className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
+                                >
+                                    <div className="relative overflow-hidden h-44 sm:h-52">
+                                        <img src={service.images[0]} alt={service.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                        {/* Discount tag — hidden for subscribed users on maintain card */}
+                                        {!showFree && (
+                                            <div className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 shadow-sm">
+                                                <Tag className="w-3 h-3" /> {service.discount}
+                                            </div>
+                                        )}
+                                        {/* FREE badge for members */}
+                                        {showFree && (
+                                            <div className="absolute top-3 left-3 bg-[#14532d] text-white text-xs font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 shadow-sm">
+                                                <Gift className="w-3 h-3" /> FREE for Members
+                                            </div>
+                                        )}
                                     </div>
-                                </div>
-                                <div className="p-5 space-y-3">
-                                    <h3 className="font-heading font-bold text-text text-base leading-snug group-hover:text-primary transition-colors">{service.title}</h3>
-                                    <p className="text-subtext text-xs leading-relaxed line-clamp-2">{service.tagline}</p>
-                                    <div className="flex items-center justify-between gap-2">
-                                        <div className="flex items-baseline gap-2">
-                                            <span className="text-primary font-bold text-lg">₹{service.price.toLocaleString()}</span>
-                                            <span className="text-subtext text-xs line-through">₹{service.originalPrice.toLocaleString()}</span>
+                                    <div className="p-5 space-y-3">
+                                        <h3 className="font-heading font-bold text-text text-base leading-snug group-hover:text-primary transition-colors">{service.title}</h3>
+                                        <p className="text-subtext text-xs leading-relaxed line-clamp-2">{service.tagline}</p>
+                                        {/* Price row — show FREE + visits for members, normal price otherwise */}
+                                        {showFree ? (
+                                            <div className="flex items-baseline gap-2">
+                                                <span className="text-[#14532d] font-heading font-bold text-lg">FREE</span>
+                                                <span className="text-xs text-[#14532d] font-medium">{visitsLeft} visit{visitsLeft !== 1 ? 's' : ''} remaining</span>
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center justify-between gap-2">
+                                                <div className="flex items-baseline gap-2">
+                                                    <span className="text-primary font-bold text-lg">₹{service.price.toLocaleString()}</span>
+                                                    <span className="text-subtext text-xs line-through">₹{service.originalPrice.toLocaleString()}</span>
+                                                </div>
+                                                <span className="text-[10px] font-bold text-red-500 bg-red-50 border border-red-100 px-2 py-0.5 rounded-full">
+                                                    Save ₹{(service.originalPrice - service.price).toLocaleString()}
+                                                </span>
+                                            </div>
+                                        )}
+                                        <div className="flex gap-2 pt-1">
+                                            <button
+                                                onClick={e => { e.stopPropagation(); window.location.href = 'tel:+918585003674' }}
+                                                className={`flex-1 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${showFree
+                                                        ? 'bg-[#14532d] hover:bg-[#166534] text-white'
+                                                        : 'bg-primary hover:bg-secondary text-white'
+                                                    }`}
+                                            >
+                                                <Phone className="w-3.5 h-3.5" />
+                                                {showFree ? 'Book a Visit' : 'Book Now'}
+                                            </button>
+                                            <button className="flex-1 border border-primary text-primary py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-primary/5 transition-all">
+                                                Learn More <ArrowRight className="w-3 h-3" />
+                                            </button>
                                         </div>
-                                        <span className="text-[10px] font-bold text-red-500 bg-red-50 border border-red-100 px-2 py-0.5 rounded-full">
-                                            Save ₹{(service.originalPrice - service.price).toLocaleString()}
-                                        </span>
-                                    </div>
-                                    <div className="flex gap-2 pt-1">
-                                        <button
-                                            onClick={e => { e.stopPropagation(); window.location.href = 'tel:+918585003674' }}
-                                            className="flex-1 bg-primary text-white py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-secondary transition-all"
-                                        >
-                                            <Phone className="w-3.5 h-3.5" /> Book Now
-                                        </button>
-                                        <button className="flex-1 border border-primary text-primary py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-primary/5 transition-all">
-                                            Learn More <ArrowRight className="w-3 h-3" />
-                                        </button>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            )
+                        })}
                     </div>
                 </div>
             </section>
