@@ -6,6 +6,7 @@ import Home from './pages/Home'
 import ProductDetails from './pages/ProductDetails'
 import About from './pages/About'
 import Policy from './pages/Policy'
+import TermsAndConditions from './pages/TermsAndConditions'
 import Contact from './pages/Contact'
 import Plants from './pages/Plants'
 import Fertilizers from './pages/Fertilizers'
@@ -63,6 +64,7 @@ function App() {
                 <Route path="/blogs/:id" element={<BlogPost />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/policy" element={<Policy />} />
+                <Route path="/terms" element={<TermsAndConditions />} />
                 <Route path="/contact" element={<Contact />} />
 
                 {/* Protected — user account */}

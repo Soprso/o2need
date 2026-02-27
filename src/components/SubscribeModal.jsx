@@ -1,4 +1,5 @@
 import { useEffect, useCallback } from 'react'
+import { Link } from 'react-router-dom'
 import { X, Leaf, Shield, Star } from 'lucide-react'
 import { useSubscription } from '../context/SubscriptionContext'
 import SubscriptionCard from './SubscriptionCard'
@@ -101,7 +102,13 @@ const SubscribeModal = () => {
                         </div>
                         <p className="text-center text-xs text-subtext mt-8">
                             All plans include GST. Visits scheduled at your convenience.&nbsp;
-                            <span className="text-[#14532d] font-medium cursor-pointer hover:underline">Terms apply.</span>
+                            <Link
+                                to="/terms"
+                                onClick={closeAll}
+                                className="text-[#14532d] font-medium hover:underline"
+                            >
+                                *Terms apply.
+                            </Link>
                         </p>
                     </div>
                 </div>
