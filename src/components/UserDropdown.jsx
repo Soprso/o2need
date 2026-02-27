@@ -51,7 +51,7 @@ const UserDropdown = () => {
 
             {/* Dropdown Panel */}
             {open && (
-                <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-[999]">
+                <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-[999] max-h-[calc(100vh-80px)] overflow-y-auto">
                     {/* User Header */}
                     <div className="px-4 py-4 bg-gradient-to-r from-primary/5 to-secondary/5 border-b border-gray-100">
                         <div className="flex items-center gap-3">
