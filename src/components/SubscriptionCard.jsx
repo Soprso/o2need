@@ -52,7 +52,7 @@ const SubscriptionCard = ({ plan }) => {
             {/* Price */}
             <div className="flex items-end gap-1.5 mb-3">
                 <span className={`text-4xl font-bold font-heading leading-none ${recommended ? 'text-white' : 'text-[#14532d]'}`}>
-                    ₹{price.toLocaleString('en-IN')}
+                    ₹{price.toLocaleString('en-IN')}<sup className="text-lg align-super">*</sup>
                 </span>
                 <span className={`text-sm mb-1 ${recommended ? 'text-green-200' : 'text-subtext'}`}>
                     / {period}
