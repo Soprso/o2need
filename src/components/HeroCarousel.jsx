@@ -55,59 +55,66 @@ const HeroCarousel = () => {
     const next = () => setCurrent((c) => (c + 1) % slides.length)
 
     return (
-        <section className="relative h-[85vh] sm:h-[90vh] md:h-[95vh] overflow-hidden bg-[#14532d]">
+        <section className="relative h-[90vh] md:h-[95vh] overflow-hidden bg-[#14532d]">
             {slides.map((slide, i) => (
-                <div key={i} className={`absolute inset-0 transition-opacity duration-1000 ${i === current ? "opacity-100 z-10" : "opacity-0 z-0"}`}>
+                <div key={i} className={`absolute inset-0 transition-opacity duration-1000 ${i === current ? "opacity-100 z-10" : "opacity-0 z-0"} flex flex-col sm:block`}>
 
-                    {/* Image positioned top for mobile to remain visible, unconstrained on desktop */}
-                    <div className="absolute inset-0 h-[50vh] sm:h-full">
+                    {/* Image Section - top half on mobile, full screen on desktop */}
+                    <div className="relative h-[45vh] sm:h-full sm:absolute sm:inset-0 w-full flex-shrink-0">
                         <img src={slide.image} alt={slide.heading} className="w-full h-full object-cover object-center" />
+                        {/* Subtle fade overlay for desktop only */}
+                        <div className="hidden sm:block absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent" />
+                        {/* Gradient transition to green for mobile */}
+                        <div className="sm:hidden absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#14532d] to-transparent pointer-events-none" />
                     </div>
 
-                    {/* Subtle fade overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/10 sm:via-transparent to-transparent" />
-
-                    {/* Content container - flex-end on mobile, center on desktop */}
-                    <div className="absolute inset-0 flex flex-col justify-end sm:justify-center z-20 px-4 pb-16 sm:pb-0 sm:px-12 md:px-20">
+                    {/* Content container - bottom half scrollable on mobile, absolute center on desktop */}
+                    <div className="flex-1 bg-[#14532d] sm:bg-transparent sm:absolute sm:inset-0 flex flex-col justify-start sm:justify-center z-20 px-5 pt-2 pb-12 overflow-y-auto sm:overflow-visible sm:px-12 md:px-20">
                         <div
                             onClick={openModal}
-                            className="w-full sm:max-w-2xl text-white space-y-4 sm:space-y-8 p-6 sm:p-12 rounded-[2rem] bg-black/40 sm:bg-black/20 backdrop-blur-md border border-white/20 shadow-2xl transform transition-all cursor-pointer hover:bg-black/50 sm:hover:bg-black/30"
+                            className="w-full sm:max-w-2xl text-white space-y-3 sm:space-y-8 sm:p-12 sm:rounded-[2rem] sm:bg-black/20 sm:backdrop-blur-md sm:border sm:border-white/20 sm:shadow-2xl cursor-pointer hover:opacity-90 sm:hover:bg-black/30 transition-all"
                         >
 
                             {/* Logo */}
                             {slide.showLogo && (
-                                <img src="/as/logo.png" alt="O2need Logo" className="h-8 sm:h-16 mb-2 sm:mb-4 object-contain drop-shadow-lg" />
+                                <img src="/as/logo.png" alt="O2need Logo" className="h-10 sm:h-16 mb-2 sm:mb-4 object-contain drop-shadow-lg" />
                             )}
 
                             {/* Discount Tag */}
-                            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-1.5 sm:py-2.5 bg-red-600 rounded-full text-white font-bold text-xs sm:text-lg shadow-[0_0_20px_rgba(220,38,38,0.6)] animate-pulse border border-red-400 tracking-wide uppercase">
-                                <Tag className="w-3.5 h-3.5 sm:w-5 sm:h-5" /> {slide.discount}
+                            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-1.5 sm:py-2.5 bg-red-600 rounded-full text-white font-bold text-[10px] sm:text-lg shadow-[0_0_20px_rgba(220,38,38,0.6)] animate-pulse border border-red-400 tracking-wide uppercase mt-1 sm:mt-0">
+                                <Tag className="w-3 h-3 sm:w-5 sm:h-5" /> {slide.discount}
                             </div>
 
                             {/* Heading */}
-                            <h1 className="text-2xl sm:text-5xl md:text-6xl font-heading font-black leading-tight text-white drop-shadow-xl mt-2 sm:mt-0">
+                            <h1 className="text-[22px] leading-tight sm:text-5xl md:text-6xl font-heading font-black sm:leading-tight text-white drop-shadow-xl mt-1 sm:mt-0">
                                 {slide.heading.split('—')[0]}
-                                <span className="block text-xl sm:text-4xl mt-1 sm:mt-2 text-green-300">
+                                <span className="block text-lg sm:text-4xl mt-0.5 sm:mt-2 text-green-300">
                                     {slide.heading.split('—')[1] ? `— ${slide.heading.split('—')[1]}` : ''}
                                 </span>
                             </h1>
 
                             {/* Tagline */}
-                            <p className="text-base sm:text-2xl text-green-50 font-medium italic drop-shadow-md hidden sm:block">
+                            <p className="text-sm sm:text-2xl text-green-50 font-medium italic drop-shadow-md pb-1 sm:pb-0">
                                 "{slide.tagline}"
                             </p>
 
                             <div className="w-16 sm:w-24 h-1 sm:h-1.5 bg-green-500 rounded-full hidden sm:block"></div>
 
                             {/* Points List */}
-                            <ul className="space-y-2 sm:space-y-4 pt-1 sm:pt-2">
+                            <ul className="space-y-1.5 sm:space-y-4 pt-1 sm:pt-2">
                                 {slide.points.slice(0, 3).map((point, idx) => (
                                     <li key={idx} className="flex items-start gap-2.5 sm:gap-4 text-sm sm:text-xl text-white/95 font-medium drop-shadow-md">
-                                        <CheckCircle2 className="w-5 h-5 sm:w-7 sm:h-7 text-green-400 flex-shrink-0 drop-shadow" />
+                                        <CheckCircle2 className="w-4 h-4 sm:w-7 sm:h-7 text-green-400 flex-shrink-0 drop-shadow mt-0.5" />
                                         <span>{point}</span>
                                     </li>
                                 ))}
-                                {/* Hide extra points on mobile to save space */}
+                                {/* Hide extra points on mobile to save space, but show them if they need to be uniform */}
+                                {slide.points.slice(3).map((point, idx) => (
+                                    <li key={`mobile-${idx}`} className="flex sm:hidden items-start gap-2.5 text-sm text-white/95 font-medium drop-shadow-md">
+                                        <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 drop-shadow mt-0.5" />
+                                        <span>{point}</span>
+                                    </li>
+                                ))}
                                 {slide.points.slice(3).map((point, idx) => (
                                     <li key={`desktop-${idx}`} className="hidden sm:flex items-start gap-4 text-xl text-white/95 font-medium drop-shadow-md">
                                         <CheckCircle2 className="w-7 h-7 text-green-400 flex-shrink-0 drop-shadow" />
@@ -120,16 +127,16 @@ const HeroCarousel = () => {
                 </div>
             ))}
 
-            {/* Navigation Buttons */}
-            <button onClick={prev} className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-30 bg-black/20 hover:bg-black/40 backdrop-blur-md p-2 sm:p-4 rounded-full transition-all border border-white/30 text-white hover:scale-110">
-                <ChevronLeft className="w-5 h-5 sm:w-8 sm:h-8" />
+            {/* Navigation Buttons (Hidden on mobile entirely as text is clickable and dots exist, or position over the image!) */}
+            <button onClick={prev} className="absolute left-2 top-[22vh] sm:top-1/2 -translate-y-1/2 sm:left-6 z-30 bg-black/40 hover:bg-black/60 backdrop-blur-md p-2 sm:p-4 rounded-full transition-all border border-white/30 text-white hover:scale-110 flex items-center justify-center">
+                <ChevronLeft className="w-4 h-4 sm:w-8 sm:h-8" />
             </button>
-            <button onClick={next} className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-30 bg-black/20 hover:bg-black/40 backdrop-blur-md p-2 sm:p-4 rounded-full transition-all border border-white/30 text-white hover:scale-110">
-                <ChevronRight className="w-5 h-5 sm:w-8 sm:h-8" />
+            <button onClick={next} className="absolute right-2 top-[22vh] sm:top-1/2 -translate-y-1/2 sm:right-6 z-30 bg-black/40 hover:bg-black/60 backdrop-blur-md p-2 sm:p-4 rounded-full transition-all border border-white/30 text-white hover:scale-110 flex items-center justify-center">
+                <ChevronRight className="w-4 h-4 sm:w-8 sm:h-8" />
             </button>
 
             {/* Dots */}
-            <div className="absolute bottom-4 sm:bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-2 sm:gap-3 bg-black/20 backdrop-blur px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-white/10">
+            <div className="absolute bottom-5 sm:bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-2 sm:gap-3 bg-black/20 backdrop-blur px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-white/10">
                 {slides.map((_, i) => (
                     <button
                         key={i}
