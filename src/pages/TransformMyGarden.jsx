@@ -74,102 +74,58 @@ const TransformMyGarden = () => {
         reader.onerror = error => reject(error)
     })
 
-    // Initiate AI Transformation via Free AI Horde API
+    // Initiate AI Transformation via Replicate API
     const handleTransform = async () => {
         if (!file) return
         setIsProcessing(true)
         setError(null)
         setProgress(0)
 
+        // Start a simulated progress bar for the ~20-30s wait
+        const progressInterval = setInterval(() => {
+            setProgress(prev => {
+                if (prev >= 98) {
+                    clearInterval(progressInterval)
+                    return 98
+                }
+                return prev + 1
+            })
+        }, 300)
+
         try {
             const base64Image = await fileToBase64(file)
+            const imageDataWithPrefix = `data:${file.type};base64,${base64Image}`
 
-            // 1. Submit Request to AI Horde
-            const submitResponse = await fetch('https://aihorde.net/api/v2/generate/async', {
+            const response = await fetch('/.netlify/functions/transform', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'apikey': '0000000000', // Anonymous key
-                    'Client-Agent': 'O2needGardenApp:1.0:unknown'
                 },
                 body: JSON.stringify({
-                    prompt: "Turn this exact room into a highly realistic lush green indoor garden space, add potted plants on the floor, grass mats, tidy arrangement, highly professional, realistic architectural photography, vibrant greens. Maintain the exact original walls and structure.",
-                    params: {
-                        sampler_name: "k_euler_a",
-                        steps: 30,
-                        cfg_scale: 8,
-                        width: 512,
-                        height: 512,
-                        denoising_strength: 0.38 // Lowered significantly to preserve exact original geometry and just overlay greenery
-                    },
-                    nsfw: false,
-                    censor_nsfw: true,
-                    trusted_workers: false,
-                    models: ["stable_diffusion"],
-                    source_image: base64Image,
-                    source_processing: "img2img"
+                    image: imageDataWithPrefix
                 })
             })
 
-            const submitData = await submitResponse.json()
-            if (!submitResponse.ok || !submitData.id) throw new Error(submitData.message || "Failed to submit task")
+            const data = await response.json()
 
-            const jobId = submitData.id
+            if (!response.ok) {
+                throw new Error(data.error || "Failed to transform image")
+            }
 
-            // 2. Poll for Progress & Completion
-            const pollInterval = setInterval(async () => {
-                const checkResponse = await fetch(`https://aihorde.net/api/v2/generate/check/${jobId}`)
-                const checkData = await checkResponse.json()
-
-                // Update Progress (AI Horde provides wait_time, we simulate structural progress)
-                if (checkData.is_possible === false) {
-                    clearInterval(pollInterval)
-                    setIsProcessing(false)
-                    setError("Request rejected by network. Try again later.")
-                    return
-                }
-
-                // Calculate progress % based on queue status (Grok Style)
-                let currentProgress = progress
-                if (checkData.waiting > 0) currentProgress = Math.min(30, 30 - checkData.waiting)
-                if (checkData.processing > 0) currentProgress = 30 + Math.min(60, checkData.processing * 10)
-                if (checkData.done) currentProgress = 100
-
-                // Fake creeping progress to keep UI alive
-                setProgress(prev => Math.min(99, Math.max(prev + 2, currentProgress)))
-
-                // Handle Completion
-                if (checkData.done) {
-                    clearInterval(pollInterval)
-                    const resultResponse = await fetch(`https://aihorde.net/api/v2/generate/status/${jobId}`)
-                    const resultData = await resultResponse.json()
-
-                    if (resultData.generations && resultData.generations.length > 0) {
-                        setProgress(100)
-                        setTimeout(() => {
-                            setResultImage(resultData.generations[0].img) // URL link to generated image
-                            setIsProcessing(false)
-                        }, 500)
-                    } else {
-                        throw new Error("No image generated")
-                    }
-                }
-            }, 3000)
-
-            // Timeout safety (2 minutes)
-            setTimeout(() => {
-                clearInterval(pollInterval)
-                if (isProcessing) {
-                    setIsProcessing(false)
-                    setError("Generation timed out. The network might be too busy.")
-                }
-            }, 120000)
+            if (data.output) {
+                setProgress(100)
+                setResultImage(data.output)
+            } else {
+                throw new Error("No output received from AI")
+            }
 
         } catch (err) {
             console.error(err)
             setError(err.message || "An error occurred during transformation.")
-            setIsProcessing(false)
             setProgress(0)
+        } finally {
+            clearInterval(progressInterval)
+            setIsProcessing(false)
         }
     }
 
