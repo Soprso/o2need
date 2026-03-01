@@ -96,16 +96,65 @@ const DropdownMenu = ({ item }) => {
 }
 
 const SubNavbar = () => {
+    const [mobileOpen, setMobileOpen] = useState(false)
+    const [mobileExpanded, setMobileExpanded] = useState(null)
+    const navigate = useNavigate()
+
     return (
-        <div className="bg-primary sticky top-20 z-40 shadow-md">
-            <div className="container mx-auto px-4 md:px-6">
-                <div className="flex items-center gap-2 md:gap-1 py-2 overflow-x-auto whitespace-nowrap scrollbar-hide [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                    {menuItems.map((item) => (
-                        <DropdownMenu key={item.label} item={item} />
-                    ))}
+        <>
+            {/* Desktop */}
+            <div className="bg-primary sticky top-20 z-40 shadow-md hidden md:block">
+                <div className="container mx-auto px-4 md:px-6">
+                    <div className="flex items-center gap-1 py-2 overflow-visible">
+                        {menuItems.map((item) => (
+                            <DropdownMenu key={item.label} item={item} />
+                        ))}
+                    </div>
                 </div>
             </div>
-        </div>
+
+            {/* Mobile */}
+            <div className="bg-primary sticky top-20 z-40 shadow-md md:hidden">
+                <div className="flex items-center justify-between px-4 py-2.5">
+                    <span className="text-white text-sm font-semibold">Browse Categories</span>
+                    <button onClick={() => setMobileOpen(!mobileOpen)} className="text-white p-1">
+                        {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                    </button>
+                </div>
+                {mobileOpen && (
+                    <div className="bg-[#0f3d21] border-t border-white/10 px-4 py-3 space-y-1">
+                        {menuItems.map((item) => (
+                            <div key={item.label}>
+                                <button
+                                    onClick={() => setMobileExpanded(mobileExpanded === item.label ? null : item.label)}
+                                    className="w-full flex justify-between items-center py-2.5 text-white/90 text-sm font-medium"
+                                >
+                                    {item.label}
+                                    <ChevronDown className={`w-4 h-4 transition-transform ${mobileExpanded === item.label ? 'rotate-180' : ''}`} />
+                                </button>
+                                {mobileExpanded === item.label && (
+                                    <div className="bg-white/10 rounded-lg px-3 py-2 mb-2 space-y-1">
+                                        {item.items.map((sub) => (
+                                            <a
+                                                key={sub.label}
+                                                href={sub.href}
+                                                className="block py-1.5 text-sm text-white/70 hover:text-white transition-colors"
+                                                onClick={(e) => {
+                                                    setMobileOpen(false)
+                                                    if (sub.href !== '#') { e.preventDefault(); navigate(sub.href) }
+                                                }}
+                                            >
+                                                {sub.label}
+                                            </a>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+        </>
     )
 }
 
