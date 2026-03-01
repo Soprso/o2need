@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight, CheckCircle2, Tag } from "lucide-react"
 
 const slides = [
     {
-        image: "/as/carousel_indoor.png",
+        image: "/as/gardener1.png",
         showLogo: true,
         heading: "Starter Plan — ₹999/mo",
         tagline: "Clear air, Pure Life.",
@@ -17,7 +17,7 @@ const slides = [
         ],
     },
     {
-        image: "/as/carousel_outdoor.png",
+        image: "/as/img2.png",
         showLogo: false,
         heading: "Standard Plan — ₹1199/mo",
         tagline: "Professional Care for Your Green Space.",
@@ -31,7 +31,7 @@ const slides = [
         ],
     },
     {
-        image: "/as/carousel_aesthetic.png",
+        image: "/as/img3.png",
         showLogo: false,
         heading: "Mission Organised Vision Jungle",
         tagline: "Clear air, Pure Life. Transform your environment.",
