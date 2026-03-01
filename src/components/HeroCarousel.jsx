@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { ChevronLeft, ChevronRight, CheckCircle2, Tag } from "lucide-react"
+import { useSubscription } from "../context/SubscriptionContext"
 
 const slides = [
     {
@@ -48,6 +49,7 @@ const slides = [
 
 const HeroCarousel = () => {
     const [current, setCurrent] = useState(0)
+    const { openModal } = useSubscription()
 
     const prev = () => setCurrent((c) => (c - 1 + slides.length) % slides.length)
     const next = () => setCurrent((c) => (c + 1) % slides.length)
@@ -67,7 +69,10 @@ const HeroCarousel = () => {
 
                     {/* Content container - flex-end on mobile, center on desktop */}
                     <div className="absolute inset-0 flex flex-col justify-end sm:justify-center z-20 px-4 pb-16 sm:pb-0 sm:px-12 md:px-20">
-                        <div className="w-full sm:max-w-2xl text-white space-y-4 sm:space-y-8 p-6 sm:p-12 rounded-[2rem] bg-black/40 sm:bg-black/20 backdrop-blur-md border border-white/20 shadow-2xl transform transition-all">
+                        <div
+                            onClick={openModal}
+                            className="w-full sm:max-w-2xl text-white space-y-4 sm:space-y-8 p-6 sm:p-12 rounded-[2rem] bg-black/40 sm:bg-black/20 backdrop-blur-md border border-white/20 shadow-2xl transform transition-all cursor-pointer hover:bg-black/50 sm:hover:bg-black/30"
+                        >
 
                             {/* Logo */}
                             {slide.showLogo && (
