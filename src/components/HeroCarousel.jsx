@@ -65,7 +65,9 @@ const HeroCarousel = () => {
             {slides.map((slide, i) => (
                 <div key={i} className={`absolute inset-0 transition-opacity duration-1000 ${i === current ? "opacity-100 z-10" : "opacity-0 z-0"}`}>
                     <img src={slide.image} alt={slide.heading} className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
+
+                    {/* Replaced absolute dark overlay with a very subtle fade for text legibility */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent" />
 
                     <div className="absolute inset-0 flex items-center z-20 px-6 sm:px-12 md:px-20">
                         <div className="max-w-2xl text-white space-y-6 sm:space-y-8 p-8 sm:p-12 rounded-[2rem] bg-black/20 backdrop-blur-md border border-white/20 shadow-2xl transform transition-all">
