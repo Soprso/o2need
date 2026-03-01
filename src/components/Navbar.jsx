@@ -70,8 +70,8 @@ const Navbar = () => {
                 <div className="flex h-20 items-center gap-4">
 
                     {/* Logo */}
-                    <Link to="/" className="flex-shrink-0 flex items-center pr-4 sm:pr-10">
-                        <div className="shrink-0 flex items-center pr-2">
+                    <Link to="/" className="flex-shrink-0 flex items-center pr-4 sm:pr-8">
+                        <div className="shrink-0 flex items-center pr-6 sm:pr-12">
                             <img src="/as/logo.png" alt="O2" className="h-16 sm:h-20 w-auto object-contain drop-shadow-sm scale-[1.75] sm:scale-[2] origin-left ml-2 sm:ml-4" />
                         </div>
                         <span className="text-[#8B4513] font-heading font-black text-xl sm:text-2xl lg:text-3xl tracking-tighter mt-0.5 sm:mt-1">
