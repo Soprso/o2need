@@ -16,7 +16,7 @@ const TermsAndConditions = () => (
                 {
                     title: '2. Additional Area Charges',
                     content:
-                        'For garden spaces exceeding 100 sq ft, an additional charge of ₹49 per 10 sq ft is applicable for the extra area per visit. This rate applies uniformly across all plan tiers. The additional charge will be communicated to you clearly before work commences on the extra area.',
+                        'For garden spaces exceeding 100 sq ft, an additional charge of ₹99 per 10 sq ft is applicable for the extra area per visit. This rate applies uniformly across all plan tiers. The additional charge will be communicated to you clearly before work commences on the extra area.',
                 },
                 {
                     title: '3. Cancellation Policy',
