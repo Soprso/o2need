@@ -65,8 +65,11 @@ const Navbar = () => {
     )
 
     return (
-        <nav className="bg-white border-b border-gray-100 sticky top-0 z-50">
-            <div className="container mx-auto px-4 md:px-6">
+        <nav className="bg-white border-b border-gray-100 sticky top-0 z-50 relative">
+            {/* 3D Vine Overlay Pattern */}
+            <div className="absolute inset-x-0 top-0 h-16 sm:h-24 bg-[url('/as/vine_bg.png')] bg-repeat-x bg-top bg-contain opacity-90 pointer-events-none z-0 filter drop-shadow-sm mix-blend-multiply" />
+
+            <div className="container mx-auto px-4 md:px-6 relative z-10">
                 <div className="flex h-20 items-center gap-4">
 
                     {/* Logo */}
