@@ -4,6 +4,7 @@ import SubscribeModal from "../components/SubscribeModal"
 import ServiceDetailsModal from "../components/ServiceDetailsModal"
 import SuccessModal from "../components/SuccessModal"
 import MembershipPerksModal from "../components/MembershipPerksModal"
+import FloatingWhatsApp from "../components/FloatingWhatsApp"
 import { Outlet, Link } from "react-router-dom"
 import { Leaf } from "lucide-react"
 
@@ -59,6 +60,7 @@ const MainLayout = () => (
                 </div>
             </div>
         </footer>
+        <FloatingWhatsApp />
     </div>
 )
 
