@@ -71,30 +71,10 @@ const Navbar = () => {
 
                     {/* Logo */}
                     <Link to="/" className="flex-shrink-0 flex items-center pr-4 sm:pr-10">
-                        <style>{`
-                            @keyframes dustCycle {
-                                0%, 100% {
-                                    opacity: 0;
-                                    filter: blur(8px);
-                                    transform: scale(1.1) translateY(-8px) translateX(10px);
-                                    letter-spacing: 12px;
-                                }
-                                20%, 80% {
-                                    opacity: 1;
-                                    filter: blur(0px);
-                                    transform: scale(1) translateY(0) translateX(0);
-                                    letter-spacing: -1px;
-                                }
-                            }
-                            .animate-dust { 
-                                animation: dustCycle 6s infinite ease-in-out; 
-                                display: inline-block;
-                            }
-                        `}</style>
-                        <div className="w-20 sm:w-32 lg:w-40 shrink-0 flex items-center">
+                        <div className="shrink-0 flex items-center pr-2">
                             <img src="/as/logo.png" alt="O2" className="h-16 sm:h-20 w-auto object-contain drop-shadow-sm scale-[1.75] sm:scale-[2] origin-left ml-2 sm:ml-4" />
                         </div>
-                        <span className="text-[#8B4513] font-heading font-black text-xl sm:text-2xl lg:text-3xl tracking-tighter animate-dust mt-0.5 sm:mt-1">
+                        <span className="text-[#8B4513] font-heading font-black text-xl sm:text-2xl lg:text-3xl tracking-tighter mt-0.5 sm:mt-1">
                             need
                         </span>
                     </Link>
