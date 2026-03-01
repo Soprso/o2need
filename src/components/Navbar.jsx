@@ -98,7 +98,11 @@ const Navbar = () => {
     )
 
     return (
-        <nav className="bg-white border-b border-gray-100 sticky top-0 z-50 relative">
+        <nav className="bg-white border-b border-gray-100 sticky top-0 z-50 relative overflow-hidden">
+            {/* Ornate Vine Corners */}
+            <div className="absolute top-0 left-0 w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 bg-[url('/as/vine_corner.png')] bg-contain bg-no-repeat pointer-events-none z-0 mix-blend-multiply scale-x-[-1] opacity-90" />
+            <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 bg-[url('/as/vine_corner.png')] bg-contain bg-no-repeat pointer-events-none z-0 mix-blend-multiply opacity-90" />
+
             <FallingLeaves />
             <div className="container mx-auto px-4 md:px-6 relative z-10">
                 <div className="flex h-20 items-center gap-4">
