@@ -69,46 +69,46 @@ const HeroCarousel = () => {
                     <div className="absolute inset-0 flex flex-col justify-end sm:justify-center z-20 px-4 pb-12 sm:pb-0 sm:px-12 md:px-20">
                         <div
                             onClick={openModal}
-                            className="w-full sm:max-w-2xl text-white space-y-2 sm:space-y-8 p-4 sm:p-12 rounded-2xl sm:rounded-[2rem] bg-black/40 sm:bg-black/20 backdrop-blur-md border border-white/20 shadow-2xl transform transition-all cursor-pointer hover:bg-black/50 sm:hover:bg-black/30 mb-2 sm:mb-0"
+                            className="w-full sm:max-w-xl md:max-w-2xl text-white space-y-2 sm:space-y-4 p-4 sm:p-6 sm:px-10 rounded-2xl sm:rounded-3xl bg-black/40 sm:bg-black/20 backdrop-blur-md border border-white/20 shadow-2xl transform transition-all cursor-pointer hover:bg-black/50 sm:hover:bg-black/30 mb-2 sm:mb-0"
                         >
 
                             {/* Logo - Hide on mobile to save space and keep it clean */}
                             {slide.showLogo && (
-                                <img src="/as/logo.png" alt="O2need Logo" className="hidden sm:block h-10 sm:h-16 mb-2 sm:mb-4 object-contain drop-shadow-lg" />
+                                <img src="/as/logo.png" alt="O2need Logo" className="hidden sm:block h-10 sm:h-12 mb-2 sm:mb-2 object-contain drop-shadow-lg" />
                             )}
 
                             {/* Discount Tag */}
-                            <div className="inline-flex items-center gap-1 sm:gap-2 px-2.5 sm:px-5 py-1 sm:py-2.5 bg-red-600 rounded-full text-white font-bold text-[10px] sm:text-lg shadow-[0_0_20px_rgba(220,38,38,0.6)] animate-pulse border border-red-400 tracking-wide uppercase">
-                                <Tag className="w-3 h-3 sm:w-5 sm:h-5" /> {slide.discount}
+                            <div className="inline-flex items-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-1 sm:py-2 bg-red-600 rounded-full text-white font-bold text-[10px] sm:text-sm shadow-[0_0_20px_rgba(220,38,38,0.6)] animate-pulse border border-red-400 tracking-wide uppercase">
+                                <Tag className="w-3 h-3 sm:w-4 sm:h-4" /> {slide.discount}
                             </div>
 
                             {/* Heading */}
-                            <h1 className="text-[20px] leading-tight sm:text-5xl md:text-6xl font-heading font-black sm:leading-tight text-white drop-shadow-xl mt-1 sm:mt-0">
+                            <h1 className="text-[20px] leading-tight sm:text-4xl md:text-5xl font-heading font-black sm:leading-tight text-white drop-shadow-xl mt-1 sm:mt-0">
                                 {slide.heading.split('—')[0]}
-                                <span className="block text-sm sm:text-4xl mt-0.5 sm:mt-2 text-green-300">
+                                <span className="block text-sm sm:text-2xl mt-0.5 sm:mt-1 text-green-300">
                                     {slide.heading.split('—')[1] ? `— ${slide.heading.split('—')[1]}` : ''}
                                 </span>
                             </h1>
 
                             {/* Tagline */}
-                            <p className="text-xs sm:text-2xl text-green-50 font-medium italic drop-shadow-md pb-1 sm:pb-0">
+                            <p className="text-xs sm:text-lg text-green-50 font-medium italic drop-shadow-md pb-1 sm:pb-0 block">
                                 "{slide.tagline}"
                             </p>
 
-                            <div className="w-12 sm:w-24 h-0.5 sm:h-1.5 bg-green-500 rounded-full hidden sm:block"></div>
+                            <div className="w-12 sm:w-20 h-0.5 sm:h-1 bg-green-500 rounded-full hidden sm:block"></div>
 
                             {/* Points List - Show only 2 points highly compact on mobile */}
-                            <ul className="space-y-1 sm:space-y-4 pt-1 sm:pt-2">
+                            <ul className="space-y-1 sm:space-y-2 pt-1 sm:pt-1">
                                 {slide.points.slice(0, 2).map((point, idx) => (
-                                    <li key={idx} className="flex items-start gap-1.5 sm:gap-4 text-[11px] sm:text-xl text-white/95 font-medium drop-shadow-md">
-                                        <CheckCircle2 className="w-3 h-3 sm:w-7 sm:h-7 text-green-400 flex-shrink-0 drop-shadow mt-0.5" />
+                                    <li key={idx} className="flex items-start gap-1.5 sm:gap-3 text-[11px] sm:text-base text-white/95 font-medium drop-shadow-md">
+                                        <CheckCircle2 className="w-3 h-3 sm:w-5 sm:h-5 text-green-400 flex-shrink-0 drop-shadow mt-0.5" />
                                         <span>{point}</span>
                                     </li>
                                 ))}
                                 {/* Desktop only points */}
                                 {slide.points.slice(2).map((point, idx) => (
-                                    <li key={`desktop-${idx}`} className="hidden sm:flex items-start gap-4 text-xl text-white/95 font-medium drop-shadow-md">
-                                        <CheckCircle2 className="w-7 h-7 text-green-400 flex-shrink-0 drop-shadow mt-0.5" />
+                                    <li key={`desktop-${idx}`} className="hidden sm:flex items-start gap-3 text-base text-white/95 font-medium drop-shadow-md">
+                                        <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0 drop-shadow mt-0.5" />
                                         <span>{point}</span>
                                     </li>
                                 ))}
