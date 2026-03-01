@@ -173,14 +173,6 @@ const TransformMyGarden = () => {
         }
     }
 
-    // Grok-style text progress bar generator
-    const getProgressBar = (percent) => {
-        const totalBars = 20;
-        const filledBars = Math.floor((percent / 100) * totalBars);
-        const emptyBars = totalBars - filledBars;
-        return `[${'='.repeat(Math.max(0, filledBars - 1))}${filledBars > 0 && percent < 100 ? '>' : (percent === 100 ? '=' : '')}${' '.repeat(emptyBars)}]`;
-    }
-
     return (
         <div className="min-h-screen bg-background py-12 font-sans relative overflow-hidden">
             {/* Background Accents */}
@@ -281,38 +273,24 @@ const TransformMyGarden = () => {
                             </div>
                         )}
 
-                        {/* Processing State with Grok UI */}
+                        {/* Processing State with Clean Progress */}
                         {isProcessing && (
                             <div className="w-full bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-primary/20 overflow-hidden relative">
                                 <ContainerFallingLeaves />
 
                                 <div className="relative z-10 p-8 sm:p-12 flex flex-col items-center justify-center min-h-[400px]">
-                                    {/* Grok Terminal Loader */}
-                                    <div className="w-full max-w-sm bg-gray-900 rounded-xl p-6 shadow-2xl font-mono text-green-400 text-sm overflow-hidden border border-gray-700">
-                                        <div className="flex items-center gap-2 mb-4 text-gray-400 border-b border-gray-700 pb-2">
-                                            <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                                            <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                                            <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                                            <span className="ml-2 text-xs">AI_Engine_v2.sh</span>
-                                        </div>
 
-                                        <div className="space-y-2">
-                                            <p className="text-gray-300">$ analyzing_space --target image</p>
-                                            {progress > 10 && <p className="text-gray-300">$ identifying_optimal_plant_placements...</p>}
-                                            {progress > 40 && <p className="text-gray-300">$ generating_lush_textures...</p>}
-                                            {progress > 70 && <p className="text-gray-300">$ applying_natural_lighting...</p>}
-
-                                            <div className="mt-6 pt-4 border-t border-gray-800">
-                                                <p className="text-xs text-gray-500 mb-1">status: {progress < 100 ? 'rendering_in_cloud' : 'finalizing_output'}</p>
-                                                <div className="flex items-center justify-between font-bold text-green-400 text-sm sm:text-base whitespace-pre">
-                                                    <span>{getProgressBar(progress)}</span>
-                                                    <span>{progress}%</span>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div className="w-48 h-48 rounded-full border-8 border-primary/10 flex items-center justify-center relative mb-4">
+                                        <div
+                                            className="absolute inset-0 rounded-full border-8 border-primary shadow-lg border-t-transparent border-l-transparent animate-spin"
+                                            style={{ animationDuration: '3s' }}
+                                        />
+                                        <span className="font-heading text-5xl font-black text-primary">
+                                            {progress}%
+                                        </span>
                                     </div>
 
-                                    <h3 className="mt-8 font-heading font-bold text-2xl text-text animate-pulse">Planting virtual seeds...</h3>
+                                    <h3 className="mt-6 font-heading font-bold text-2xl text-text animate-pulse">Planting virtual seeds...</h3>
                                     <p className="text-subtext text-center max-w-xs mt-2">This usually takes about 15-30 seconds depending on network traffic.</p>
                                 </div>
                             </div>
