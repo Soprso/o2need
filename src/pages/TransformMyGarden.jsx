@@ -106,11 +106,12 @@ const TransformMyGarden = () => {
                 })
             })
 
-            const data = await response.json()
-
             if (!response.ok) {
-                throw new Error(data.error || "Failed to transform image")
+                const errorText = await response.text()
+                throw new Error(`Server Error (${response.status}): ${errorText || "Could not reach transformation service"}`)
             }
+
+            const data = await response.json()
 
             if (data.output) {
                 setProgress(100)

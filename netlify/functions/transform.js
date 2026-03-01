@@ -5,7 +5,15 @@ export async function handler(event) {
         auth: process.env.REPLICATE_API_TOKEN,
     });
 
+    const headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Content-Type': 'application/json',
+    };
+
     try {
+        if (event.httpMethod === 'OPTIONS') return { statusCode: 200, headers, body: '' };
+
         const { image } = JSON.parse(event.body);
 
         const output = await replicate.run(
@@ -23,6 +31,7 @@ export async function handler(event) {
 
         return {
             statusCode: 200,
+            headers,
             body: JSON.stringify({
                 output: output[0]
             })
@@ -32,6 +41,7 @@ export async function handler(event) {
         console.error("Replicate Error:", error);
         return {
             statusCode: 500,
+            headers,
             body: JSON.stringify({ error: error.message })
         };
     }
