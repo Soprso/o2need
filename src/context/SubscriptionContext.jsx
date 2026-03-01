@@ -16,6 +16,7 @@ export const MEMBERSHIP_PLANS = [
         recommended: false,
         services: [
             { label: 'Plant Health Analysis', included: true },
+            { label: 'Soil Check', included: true },
             { label: 'Basic Cutting & Pruning', included: true },
             { label: 'Dry Leaf Removal', included: true },
             { label: 'Plant Watering', included: true },
@@ -26,6 +27,7 @@ export const MEMBERSHIP_PLANS = [
         ],
         features: [
             'Plant health analysis',
+            'Soil check',
             'Basic cutting & pruning',
             'Dry leaf removal',
             'Plant watering',
