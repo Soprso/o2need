@@ -66,6 +66,7 @@ function App() {
                 <Route path="/policy" element={<Policy />} />
                 <Route path="/terms" element={<TermsAndConditions />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/transform-my-garden" element={<TransformMyGarden />} />
 
                 {/* Protected — user account */}
                 <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
