@@ -1,11 +1,38 @@
 import { SignedIn, SignedOut, SignInButton, useUser, useClerk } from '@clerk/clerk-react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Menu, X, Search, Sparkles, Crown, User, ShoppingBag, Heart, Bell, Settings, HelpCircle, LogOut, ChevronRight } from 'lucide-react'
+import { Menu, X, Search, Sparkles, Crown, User, ShoppingBag, Heart, Bell, Settings, HelpCircle, LogOut, ChevronRight, Leaf } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
 import { allStaticProducts } from '../data/products'
 import UserDropdown from './UserDropdown'
 import CartIcon from './CartIcon'
 import { useSubscription } from '../context/SubscriptionContext'
+
+const FallingLeaves = () => (
+    <div className="absolute inset-x-0 top-0 h-20 overflow-hidden pointer-events-none z-0">
+        <style>{`
+            @keyframes fall {
+                0% { transform: translate(0, -20px) rotate(0deg); opacity: 0; }
+                10% { opacity: 0.15; }
+                90% { opacity: 0.15; }
+                100% { transform: translate(30px, 100px) rotate(180deg); opacity: 0; }
+            }
+            .leaf-anim {
+                position: absolute;
+                top: -20px;
+                animation: fall linear infinite;
+            }
+            .delay-0 { animation-delay: 0s; animation-duration: 14s; left: 15%; color: #16a34a; }
+            .delay-1 { animation-delay: 4s; animation-duration: 18s; left: 35%; color: #14532d; }
+            .delay-2 { animation-delay: 2s; animation-duration: 16s; left: 55%; color: #22c55e; }
+            .delay-3 { animation-delay: 7s; animation-duration: 19s; left: 75%; color: #166534; }
+            .delay-4 { animation-delay: 1s; animation-duration: 15s; left: 85%; color: #15803d; }
+            .delay-5 { animation-delay: 5s; animation-duration: 17s; left: 5%; color: #4ade80; }
+        `}</style>
+        {[...Array(6)].map((_, i) => (
+            <Leaf key={i} className={`leaf-anim delay-${i} w-3 h-3 sm:w-4 sm:h-4 opacity-0 fill-current`} />
+        ))}
+    </div>
+)
 
 const Navbar = () => {
     const navigate = useNavigate()
@@ -65,8 +92,9 @@ const Navbar = () => {
     )
 
     return (
-        <nav className="bg-white border-b border-gray-100 sticky top-0 z-50">
-            <div className="container mx-auto px-4 md:px-6">
+        <nav className="bg-white border-b border-gray-100 sticky top-0 z-50 relative">
+            <FallingLeaves />
+            <div className="container mx-auto px-4 md:px-6 relative z-10">
                 <div className="flex h-20 items-center gap-4">
 
                     {/* Logo */}
