@@ -81,11 +81,11 @@ const Navbar = () => {
                                 animation-delay: 0.2s; 
                             }
                         `}</style>
-                        <div className="w-14 sm:w-20 lg:w-24 shrink-0">
+                        <div className="w-20 sm:w-32 lg:w-40 shrink-0 flex items-center">
                             <img src="/as/logo.png" alt="O2" className="h-16 sm:h-20 w-auto object-contain drop-shadow-sm scale-[1.75] sm:scale-[2] origin-left ml-2 sm:ml-4" />
                         </div>
                         <span className="text-[#8B4513] font-heading font-black text-xl sm:text-2xl lg:text-3xl tracking-tighter animate-text-reveal opacity-0 mt-0.5 sm:mt-1 hover:scale-105 transition-transform">
-                            need.com
+                            need
                         </span>
                     </Link>
 
