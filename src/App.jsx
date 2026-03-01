@@ -29,6 +29,7 @@ import PluckYourOwnVegetables from './pages/Services/PluckYourOwnVegetables'
 import Dashboard from './pages/Admin/Dashboard'
 import AddProduct from './pages/Admin/AddProduct'
 import AdminPanel from './pages/Admin/AdminPanel'
+import TransformMyGarden from './pages/TransformMyGarden'
 
 const Loader = () => (
     <div className="h-screen flex items-center justify-center">
