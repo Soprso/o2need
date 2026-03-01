@@ -93,14 +93,14 @@ const TransformMyGarden = () => {
                     'Client-Agent': 'O2needGardenApp:1.0:unknown'
                 },
                 body: JSON.stringify({
-                    prompt: "A beautiful, clean, well-maintained lush green indoor garden space with potted plants, grass mats, tidy arrangement, highly professional, realistic, architectural photography, vibrant greens",
+                    prompt: "Turn this exact room into a highly realistic lush green indoor garden space, add potted plants on the floor, grass mats, tidy arrangement, highly professional, realistic architectural photography, vibrant greens. Maintain the exact original walls and structure.",
                     params: {
                         sampler_name: "k_euler_a",
-                        steps: 25,
-                        cfg_scale: 7,
+                        steps: 30,
+                        cfg_scale: 8,
                         width: 512,
                         height: 512,
-                        denoising_strength: 0.65 // Keep structure but change contents
+                        denoising_strength: 0.38 // Lowered significantly to preserve exact original geometry and just overlay greenery
                     },
                     nsfw: false,
                     censor_nsfw: true,
