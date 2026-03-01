@@ -12,8 +12,8 @@ const FallingLeaves = () => (
         <style>{`
             @keyframes fall {
                 0% { transform: translate(0, -20px) rotate(0deg); opacity: 0; }
-                10% { opacity: 0.15; }
-                90% { opacity: 0.15; }
+                10% { opacity: 0.35; }
+                90% { opacity: 0.35; }
                 100% { transform: translate(30px, 100px) rotate(180deg); opacity: 0; }
             }
             .leaf-anim {
@@ -21,14 +21,20 @@ const FallingLeaves = () => (
                 top: -20px;
                 animation: fall linear infinite;
             }
-            .delay-0 { animation-delay: 0s; animation-duration: 14s; left: 15%; color: #16a34a; }
-            .delay-1 { animation-delay: 4s; animation-duration: 18s; left: 35%; color: #14532d; }
-            .delay-2 { animation-delay: 2s; animation-duration: 16s; left: 55%; color: #22c55e; }
-            .delay-3 { animation-delay: 7s; animation-duration: 19s; left: 75%; color: #166534; }
-            .delay-4 { animation-delay: 1s; animation-duration: 15s; left: 85%; color: #15803d; }
-            .delay-5 { animation-delay: 5s; animation-duration: 17s; left: 5%; color: #4ade80; }
+            .delay-0 { animation-delay: 0s; animation-duration: 14s; left: 5%; color: #16a34a; }
+            .delay-1 { animation-delay: 4s; animation-duration: 18s; left: 15%; color: #14532d; }
+            .delay-2 { animation-delay: 2s; animation-duration: 16s; left: 25%; color: #22c55e; }
+            .delay-3 { animation-delay: 7s; animation-duration: 19s; left: 35%; color: #166534; }
+            .delay-4 { animation-delay: 1s; animation-duration: 15s; left: 45%; color: #15803d; }
+            .delay-5 { animation-delay: 5s; animation-duration: 17s; left: 55%; color: #4ade80; }
+            .delay-6 { animation-delay: 3s; animation-duration: 16s; left: 65%; color: #14532d; }
+            .delay-7 { animation-delay: 8s; animation-duration: 20s; left: 75%; color: #16a34a; }
+            .delay-8 { animation-delay: 6s; animation-duration: 15s; left: 85%; color: #22c55e; }
+            .delay-9 { animation-delay: 2.5s; animation-duration: 14s; left: 95%; color: #15803d; }
+            .delay-10 { animation-delay: 9s; animation-duration: 18s; left: 10%; color: #166534; }
+            .delay-11 { animation-delay: 4.5s; animation-duration: 19s; left: 80%; color: #4ade80; }
         `}</style>
-        {[...Array(6)].map((_, i) => (
+        {[...Array(12)].map((_, i) => (
             <Leaf key={i} className={`leaf-anim delay-${i} w-3 h-3 sm:w-4 sm:h-4 opacity-0 fill-current`} />
         ))}
     </div>
