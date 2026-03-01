@@ -40,7 +40,7 @@ const WhyO2need = () => {
                         className="w-full md:w-1/2 space-y-4"
                     >
                         <div className="flex items-center">
-                            <div className="shrink-0 flex items-center pr-6 sm:pr-12">
+                            <div className="w-28 sm:w-48 md:w-56 shrink-0 flex items-center">
                                 <img src="/as/logo.png" alt="O2" className="h-14 sm:h-20 md:h-24 w-auto object-contain drop-shadow-sm scale-[2] sm:scale-[2.25] origin-left ml-2 sm:ml-4" />
                             </div>
                             <h2 className="text-[#8B4513] font-heading font-black text-4xl sm:text-5xl md:text-[54px] tracking-tighter mt-1 sm:mt-3">
