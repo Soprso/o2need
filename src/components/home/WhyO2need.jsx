@@ -39,10 +39,15 @@ const WhyO2need = () => {
                         transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
                         className="w-full md:w-1/2 space-y-4"
                     >
-                        <h2 className="text-[42px] leading-tight font-heading font-bold text-[#1a1a1a]">
-                            O2need.com
-                        </h2>
-                        <h3 className="text-[24px] font-medium text-[#2e7d32]">
+                        <div className="flex items-center">
+                            <div className="shrink-0 flex items-center pr-4 sm:pr-8">
+                                <img src="/as/logo.png" alt="O2" className="h-10 sm:h-14 md:h-16 w-auto object-contain drop-shadow-sm scale-[1.75] sm:scale-[2] origin-left ml-2 sm:ml-4" />
+                            </div>
+                            <h2 className="text-[#8B4513] font-heading font-black text-3xl sm:text-4xl md:text-[42px] tracking-tighter mt-0.5 sm:mt-2">
+                                need
+                            </h2>
+                        </div>
+                        <h3 className="text-[20px] sm:text-[24px] font-medium text-[#2e7d32] mt-1 sm:mt-2">
                             Breathe Life Indoors
                         </h3>
                     </motion.div>
