@@ -95,8 +95,8 @@ function App() {
                 <Route path="add" element={<AddProduct />} />
             </Route>
 
-            {/* Standalone — password-protected admin panel (no nav link) */}
-            <Route path="/o2need-control" element={<AdminPanel />} />
+            {/* Standalone — password-protected admin panel with Clerk protection */}
+            <Route path="/o2need-control" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
 
             <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

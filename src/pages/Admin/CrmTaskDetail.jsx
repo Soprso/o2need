@@ -182,6 +182,17 @@ const CrmTaskDetail = ({ task: initialTask, onBack, onDelete }) => {
                         </div>
                     </div>
 
+                    {/* Created by */}
+                    <div className="space-y-2">
+                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Created By</p>
+                        <div className="flex items-center gap-2 text-sm text-gray-700 font-bold">
+                            <span className="text-xs truncate max-w-[150px]">{task.created_by_name || 'Anonymous'}</span>
+                            {task.created_by_email && (
+                                <span className="text-[9px] font-normal text-gray-400 hidden lg:block">({task.created_by_email})</span>
+                            )}
+                        </div>
+                    </div>
+
                     {/* Created at */}
                     <div className="space-y-2">
                         <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Created At</p>

@@ -166,9 +166,16 @@ const CrmTodos = ({ onCreateTask, onViewTask }) => {
                                         {task.description && (
                                             <p className="text-xs text-gray-500 truncate leading-relaxed">{task.description}</p>
                                         )}
-                                        <div className="flex items-center gap-1.5 mt-2 text-xs text-gray-400">
-                                            <Calendar className="w-3 h-3" />
-                                            <span>{fmtTime(task.created_at)}</span>
+                                        <div className="flex items-center gap-3 mt-2 text-[10px] text-gray-400">
+                                            <div className="flex items-center gap-1">
+                                                <Calendar className="w-3 h-3" />
+                                                <span>{fmtTime(task.created_at)}</span>
+                                            </div>
+                                            {task.created_by_name && (
+                                                <div className="flex items-center gap-1 border-l border-gray-200 pl-3">
+                                                    <span className="font-bold text-gray-500">By {task.created_by_name}</span>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
 

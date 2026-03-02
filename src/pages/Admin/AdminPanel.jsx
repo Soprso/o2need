@@ -95,6 +95,7 @@ const PAGE_MAP = {
 
 // ── CRM Shell ──────────────────────────────────────────────────────────────
 const CrmShell = ({ onLogout }) => {
+    const { user } = useUser()
     const [active, setActive] = useState('dashboard')
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
@@ -128,6 +129,17 @@ const CrmShell = ({ onLogout }) => {
                 ))}
             </nav>
 
+            {/* User Presence in Sidebar Footer */}
+            <div className="px-5 pb-4 space-y-3">
+                <div className="flex items-center gap-3 px-1">
+                    <UserButton afterSignOutUrl="/" />
+                    <div className="min-w-0">
+                        <p className="text-white text-xs font-bold truncate">{user?.fullName || 'Admin User'}</p>
+                        <p className="text-green-300 text-[9px] truncate">{user?.primaryEmailAddress?.emailAddress}</p>
+                    </div>
+                </div>
+            </div>
+
             {/* Footer */}
             <div className="px-3 pb-6 border-t border-white/10 pt-4 space-y-2">
                 <a href="/" target="_blank" rel="noopener noreferrer"
@@ -136,7 +148,7 @@ const CrmShell = ({ onLogout }) => {
                 </a>
                 <button onClick={onLogout}
                     className="w-full flex items-center gap-2 px-4 py-2.5 text-green-200 hover:text-white hover:bg-white/10 rounded-xl text-sm font-medium transition-all">
-                    <LogOut className="w-4 h-4" /> Logout
+                    <LogOut className="w-4 h-4" /> Logout Admin
                 </button>
             </div>
         </div>
@@ -170,17 +182,19 @@ const CrmShell = ({ onLogout }) => {
                             {NAV.find(n => n.id === active)?.label}
                         </h1>
                     </div>
-                    <div className="ml-auto flex items-center gap-2">
-                        <span className="text-xs text-gray-400 hidden sm:block">O2need Control</span>
-                        <button onClick={onLogout} className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-800 font-medium">
-                            <LogOut className="w-3.5 h-3.5" /> Logout
-                        </button>
+                    <div className="ml-auto flex items-center gap-4">
+                        <span className="text-xs text-gray-400 hidden lg:block">O2need Control Center</span>
+                        <div className="h-6 w-[1px] bg-gray-200 hidden lg:block" />
+                        <div className="flex items-center gap-2">
+                            <span className="text-[10px] text-gray-500 font-medium hidden sm:block truncate max-w-[100px]">{user?.firstName}</span>
+                            <UserButton afterSignOutUrl="/" />
+                        </div>
                     </div>
                 </header>
 
                 {/* Page */}
                 <main className="flex-1 p-6">
-                    <ActivePage />
+                    <ActivePage user={user} />
                 </main>
             </div>
         </div>

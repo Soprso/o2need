@@ -7,7 +7,7 @@ import CrmTaskDetail from './CrmTaskDetail'
 
 const VIEW = { LIST: 'list', CREATE: 'create', DETAIL: 'detail' }
 
-const CrmTodosContainer = () => {
+const CrmTodosContainer = ({ user }) => {
     const [view, setView] = useState(VIEW.LIST)
     const [selectedTask, setSelectedTask] = useState(null)
 
@@ -16,6 +16,7 @@ const CrmTodosContainer = () => {
     if (view === VIEW.CREATE) {
         return (
             <CrmCreateTask
+                user={user}
                 onBack={goList}
                 onCreated={() => goList()}
             />
@@ -25,6 +26,7 @@ const CrmTodosContainer = () => {
     if (view === VIEW.DETAIL && selectedTask) {
         return (
             <CrmTaskDetail
+                user={user}
                 task={selectedTask}
                 onBack={goList}
                 onDelete={goList}
@@ -34,6 +36,7 @@ const CrmTodosContainer = () => {
 
     return (
         <CrmTodos
+            user={user}
             onCreateTask={() => setView(VIEW.CREATE)}
             onViewTask={(task) => { setSelectedTask(task); setView(VIEW.DETAIL) }}
         />

@@ -1,6 +1,6 @@
 // Netlify Function: /.netlify/functions/todos
 // CRUD for admin to-do tasks stored in CockroachDB
-// Uses ESM + Pool to match working server.cjs configuration
+// Includes: SSL fix, ESM support, and user tracking (created_by)
 
 import pg from 'pg';
 const { Pool } = pg;
@@ -14,20 +14,29 @@ const headers = {
     'Content-Type': 'application/json',
 };
 
-// Manually parse DATABASE_URL to avoid casing issues with connectionString property
-const dbUrl = new URL(process.env.DATABASE_URL);
-const pool = new Pool({
-    user: dbUrl.username,
-    password: decodeURIComponent(dbUrl.password),
-    host: dbUrl.hostname,
-    port: dbUrl.port,
-    database: dbUrl.pathname.split('/')[1],
-    ssl: {
-        rejectUnauthorized: false
+// --- DB CONNECTION CONFIG ---
+// We manually parse the DATABASE_URL to strip 'sslmode' which can conflict with the explicit ssl object
+const parseConnectionString = (urlStr) => {
+    try {
+        const url = new URL(urlStr);
+        // Stripping query params like sslmode=verify-full to avoid pg driver conflicts
+        return {
+            user: url.username,
+            password: decodeURIComponent(url.password),
+            host: url.hostname,
+            port: url.port || 26257,
+            database: url.pathname.slice(1) || 'defaultdb',
+            ssl: { rejectUnauthorized: false }
+        };
+    } catch (e) {
+        console.error('[todos] Failed to parse DATABASE_URL:', e.message);
+        return { connectionString: urlStr, ssl: { rejectUnauthorized: false } };
     }
-});
+};
 
-// Auto-create table logic
+const pool = new Pool(parseConnectionString(process.env.DATABASE_URL));
+
+// --- SCHEMA ---
 const CREATE_TABLE_SQL = `
     CREATE TABLE IF NOT EXISTS tasks (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -36,6 +45,8 @@ const CREATE_TABLE_SQL = `
         priority VARCHAR(4) NOT NULL DEFAULT 'P3',
         status VARCHAR(32) NOT NULL DEFAULT 'new',
         image_url TEXT,
+        created_by_name TEXT,
+        created_by_email TEXT,
         created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
         updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
     )
@@ -50,23 +61,28 @@ export const handler = async (event) => {
     }
 
     try {
+        // Auto-ensure table exists (run this on every request for stability)
+        await pool.query(CREATE_TABLE_SQL);
+
         // GET — list all tasks
         if (event.httpMethod === 'GET') {
-            await pool.query(CREATE_TABLE_SQL);
             const r = await pool.query('SELECT * FROM tasks ORDER BY created_at DESC');
             return { statusCode: 200, headers, body: JSON.stringify(r.rows) };
         }
 
         // POST — create task
         if (event.httpMethod === 'POST') {
-            const { title, description, priority = 'P3', image_url } = JSON.parse(event.body || '{}');
+            const {
+                title, description, priority = 'P3', image_url,
+                created_by_name, created_by_email
+            } = JSON.parse(event.body || '{}');
+
             if (!title) return { statusCode: 400, headers, body: JSON.stringify({ error: 'title required' }) };
 
-            await pool.query(CREATE_TABLE_SQL);
             const r = await pool.query(
-                `INSERT INTO tasks (title, description, priority, image_url)
-                 VALUES ($1, $2, $3, $4) RETURNING *`,
-                [title, description || null, priority, image_url || null]
+                `INSERT INTO tasks (title, description, priority, image_url, created_by_name, created_by_email)
+                 VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+                [title, description || null, priority, image_url || null, created_by_name || null, created_by_email || null]
             );
             return { statusCode: 201, headers, body: JSON.stringify(r.rows[0]) };
         }

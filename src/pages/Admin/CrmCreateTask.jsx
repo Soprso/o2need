@@ -18,7 +18,7 @@ const PRIORITY_COLORS = {
     P5: 'border-gray-300 bg-gray-50 text-gray-600',
 }
 
-const CrmCreateTask = ({ onBack, onCreated }) => {
+const CrmCreateTask = ({ user, onBack, onCreated }) => {
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [priority, setPriority] = useState('P3')
@@ -57,7 +57,10 @@ const CrmCreateTask = ({ onBack, onCreated }) => {
             })
             const res = await fetch(`${FN_BASE}/todo-upload`, {
                 method: 'POST',
-                headers: { 'x-admin-token': 'o2need-admin-secret-2025', 'Content-Type': 'application/json' },
+                headers: {
+                    'x-admin-token': 'o2need-admin-secret-2025',
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({ data: base64, name: imageFile.name }),
             })
             const json = await res.json()
@@ -76,7 +79,14 @@ const CrmCreateTask = ({ onBack, onCreated }) => {
             const image_url = await uploadImage()
             const res = await adminFetch('todos', {
                 method: 'POST',
-                body: JSON.stringify({ title: title.trim(), description: description.trim(), priority, image_url }),
+                body: JSON.stringify({
+                    title: title.trim(),
+                    description: description.trim(),
+                    priority,
+                    image_url,
+                    created_by_name: user?.fullName || 'Anonymous Admin',
+                    created_by_email: user?.primaryEmailAddress?.emailAddress || ''
+                }),
             })
             if (!res.ok) { const j = await res.json(); throw new Error(j.error || 'Failed to create task') }
             const task = await res.json()
