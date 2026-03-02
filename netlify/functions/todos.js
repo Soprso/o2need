@@ -1,6 +1,6 @@
 // Netlify Function: /.netlify/functions/todos
 // CRUD for admin to-do tasks stored in CockroachDB
-// Uses ESM + simplified Client connection to avoid auth issues
+// Uses ESM + explicit Client parsing to handle case-sensitive usernames
 
 import pkg from 'pg';
 const { Client } = pkg;
@@ -14,21 +14,37 @@ const headers = {
     'Content-Type': 'application/json',
 };
 
-// Build a fresh Client each invocation (serverless safe)
+// Explicitly parse the connection string to handle case sensitivity and special chars
 function makeClient() {
     const connectionString = process.env.DATABASE_URL;
     if (!connectionString) {
         throw new Error('DATABASE_URL environment variable is missing');
     }
 
-    return new Client({
-        connectionString,
-        // Using the same SSL config as server.cjs which is known to work
-        ssl: {
-            rejectUnauthorized: false
-        },
-        connectionTimeoutMillis: 10000,
-    });
+    try {
+        const url = new URL(connectionString);
+        const config = {
+            user: url.username,
+            password: decodeURIComponent(url.password),
+            host: url.hostname,
+            port: url.port ? parseInt(url.port) : 26257,
+            database: url.pathname.slice(1) || 'defaultdb',
+            ssl: {
+                rejectUnauthorized: false
+            },
+            connectionTimeoutMillis: 10000,
+        };
+
+        console.log(`[todos] Attempting connection as user: "${config.user}" to host: "${config.host}"`);
+        return new Client(config);
+    } catch (e) {
+        console.error('[todos] Failed to parse DATABASE_URL:', e.message);
+        // Fallback to direct string if URL parsing fails
+        return new Client({
+            connectionString,
+            ssl: { rejectUnauthorized: false },
+        });
+    }
 }
 
 async function withDb(fn) {
@@ -59,10 +75,8 @@ const CREATE_TABLE_SQL = `
 `;
 
 export const handler = async (event) => {
-    // Handle CORS preflight
     if (event.httpMethod === 'OPTIONS') return { statusCode: 200, headers, body: '' };
 
-    // Simple token check
     const token = event.headers['x-admin-token'];
     if (token !== ADMIN_TOKEN) {
         return { statusCode: 401, headers, body: JSON.stringify({ error: 'Unauthorized' }) };
@@ -90,7 +104,7 @@ export const handler = async (event) => {
                     `INSERT INTO tasks (title, description, priority, image_url)
                      VALUES ($1, $2, $3, $4) RETURNING *`,
                     [title, description || null, priority, image_url || null]
-                );
+                )
                 return r.rows[0];
             });
             return { statusCode: 201, headers, body: JSON.stringify(row) };
@@ -107,10 +121,7 @@ export const handler = async (event) => {
             const vals = [];
             let i = 1;
             for (const key of allowed) {
-                if (key in body) {
-                    sets.push(`${key} = $${i++}`);
-                    vals.push(body[key]);
-                }
+                if (key in body) { sets.push(`${key} = $${i++}`); vals.push(body[key]); }
             }
             if (!sets.length) return { statusCode: 400, headers, body: JSON.stringify({ error: 'no fields to update' }) };
 
@@ -139,14 +150,10 @@ export const handler = async (event) => {
             return { statusCode: 200, headers, body: JSON.stringify({ success: true }) };
         }
 
-        return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) };
+        return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) }
 
     } catch (err) {
         console.error('[todos] error:', err.message);
-        return {
-            statusCode: 500,
-            headers,
-            body: JSON.stringify({ error: err.message })
-        };
+        return { statusCode: 500, headers, body: JSON.stringify({ error: err.message }) };
     }
 };
