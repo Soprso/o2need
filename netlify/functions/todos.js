@@ -1,38 +1,46 @@
 // Netlify Function: /.netlify/functions/todos
 // CRUD for admin to-do tasks stored in CockroachDB
-// Uses ESM + per-request Client to avoid Pool auth flooding in serverless
+// Uses ESM + simplified Client connection to avoid auth issues
 
-import pg from 'pg'
+import pkg from 'pg';
+const { Client } = pkg;
 
-const { Client } = pg
-
-const ADMIN_TOKEN = process.env.ADMIN_SECRET_TOKEN || 'o2need-admin-secret-2025'
+const ADMIN_TOKEN = process.env.ADMIN_SECRET_TOKEN || 'o2need-admin-secret-2025';
 
 const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type, x-admin-token',
     'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS',
     'Content-Type': 'application/json',
-}
+};
 
 // Build a fresh Client each invocation (serverless safe)
 function makeClient() {
-    // Strip sslmode from URL to avoid conflict with explicit ssl option
-    const url = process.env.DATABASE_URL.replace(/[?&]sslmode=[^&]*/g, '')
+    const connectionString = process.env.DATABASE_URL;
+    if (!connectionString) {
+        throw new Error('DATABASE_URL environment variable is missing');
+    }
+
     return new Client({
-        connectionString: url,
-        ssl: { rejectUnauthorized: false },
+        connectionString,
+        // Using the same SSL config as server.cjs which is known to work
+        ssl: {
+            rejectUnauthorized: false
+        },
         connectionTimeoutMillis: 10000,
-    })
+    });
 }
 
 async function withDb(fn) {
-    const client = makeClient()
-    await client.connect()
+    const client = makeClient();
     try {
-        return await fn(client)
+        await client.connect();
+        return await fn(client);
+    } catch (err) {
+        console.error('[todos] DB Connection/Query Error:', err.message);
+        throw err;
     } finally {
-        await client.end().catch(() => { })
+        await client.end().catch(() => { });
     }
 }
 
@@ -48,88 +56,97 @@ const CREATE_TABLE_SQL = `
         created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
         updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
     )
-`
+`;
 
 export const handler = async (event) => {
-    if (event.httpMethod === 'OPTIONS') return { statusCode: 200, headers, body: '' }
+    // Handle CORS preflight
+    if (event.httpMethod === 'OPTIONS') return { statusCode: 200, headers, body: '' };
 
-    const token = event.headers['x-admin-token']
+    // Simple token check
+    const token = event.headers['x-admin-token'];
     if (token !== ADMIN_TOKEN) {
-        return { statusCode: 401, headers, body: JSON.stringify({ error: 'Unauthorized' }) }
+        return { statusCode: 401, headers, body: JSON.stringify({ error: 'Unauthorized' }) };
     }
 
     try {
         // GET — list all tasks
         if (event.httpMethod === 'GET') {
             const rows = await withDb(async (db) => {
-                await db.query(CREATE_TABLE_SQL)
-                const r = await db.query('SELECT * FROM tasks ORDER BY created_at DESC')
-                return r.rows
-            })
-            return { statusCode: 200, headers, body: JSON.stringify(rows) }
+                await db.query(CREATE_TABLE_SQL);
+                const r = await db.query('SELECT * FROM tasks ORDER BY created_at DESC');
+                return r.rows;
+            });
+            return { statusCode: 200, headers, body: JSON.stringify(rows) };
         }
 
         // POST — create task
         if (event.httpMethod === 'POST') {
-            const { title, description, priority = 'P3', image_url } = JSON.parse(event.body || '{}')
-            if (!title) return { statusCode: 400, headers, body: JSON.stringify({ error: 'title required' }) }
+            const { title, description, priority = 'P3', image_url } = JSON.parse(event.body || '{}');
+            if (!title) return { statusCode: 400, headers, body: JSON.stringify({ error: 'title required' }) };
 
             const row = await withDb(async (db) => {
-                await db.query(CREATE_TABLE_SQL)
+                await db.query(CREATE_TABLE_SQL);
                 const r = await db.query(
                     `INSERT INTO tasks (title, description, priority, image_url)
                      VALUES ($1, $2, $3, $4) RETURNING *`,
                     [title, description || null, priority, image_url || null]
-                )
-                return r.rows[0]
-            })
-            return { statusCode: 201, headers, body: JSON.stringify(row) }
+                );
+                return r.rows[0];
+            });
+            return { statusCode: 201, headers, body: JSON.stringify(row) };
         }
 
         // PATCH — update task
         if (event.httpMethod === 'PATCH') {
-            const id = event.queryStringParameters?.id
-            if (!id) return { statusCode: 400, headers, body: JSON.stringify({ error: 'id required' }) }
+            const id = event.queryStringParameters?.id;
+            if (!id) return { statusCode: 400, headers, body: JSON.stringify({ error: 'id required' }) };
 
-            const body = JSON.parse(event.body || '{}')
-            const allowed = ['title', 'description', 'priority', 'status', 'image_url']
-            const sets = []
-            const vals = []
-            let i = 1
+            const body = JSON.parse(event.body || '{}');
+            const allowed = ['title', 'description', 'priority', 'status', 'image_url'];
+            const sets = [];
+            const vals = [];
+            let i = 1;
             for (const key of allowed) {
-                if (key in body) { sets.push(`${key} = $${i++}`); vals.push(body[key]) }
+                if (key in body) {
+                    sets.push(`${key} = $${i++}`);
+                    vals.push(body[key]);
+                }
             }
-            if (!sets.length) return { statusCode: 400, headers, body: JSON.stringify({ error: 'no fields to update' }) }
+            if (!sets.length) return { statusCode: 400, headers, body: JSON.stringify({ error: 'no fields to update' }) };
 
-            sets.push(`updated_at = now()`)
-            vals.push(id)
+            sets.push(`updated_at = now()`);
+            vals.push(id);
 
             const row = await withDb(async (db) => {
                 const r = await db.query(
                     `UPDATE tasks SET ${sets.join(', ')} WHERE id = $${i} RETURNING *`,
                     vals
-                )
-                return r.rows[0]
-            })
-            if (!row) return { statusCode: 404, headers, body: JSON.stringify({ error: 'not found' }) }
-            return { statusCode: 200, headers, body: JSON.stringify(row) }
+                );
+                return r.rows[0];
+            });
+            if (!row) return { statusCode: 404, headers, body: JSON.stringify({ error: 'not found' }) };
+            return { statusCode: 200, headers, body: JSON.stringify(row) };
         }
 
         // DELETE — remove task
         if (event.httpMethod === 'DELETE') {
-            const id = event.queryStringParameters?.id
-            if (!id) return { statusCode: 400, headers, body: JSON.stringify({ error: 'id required' }) }
+            const id = event.queryStringParameters?.id;
+            if (!id) return { statusCode: 400, headers, body: JSON.stringify({ error: 'id required' }) };
 
             await withDb(async (db) => {
-                await db.query('DELETE FROM tasks WHERE id = $1', [id])
-            })
-            return { statusCode: 200, headers, body: JSON.stringify({ success: true }) }
+                await db.query('DELETE FROM tasks WHERE id = $1', [id]);
+            });
+            return { statusCode: 200, headers, body: JSON.stringify({ success: true }) };
         }
 
-        return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) }
+        return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) };
 
     } catch (err) {
-        console.error('[todos] error:', err.message)
-        return { statusCode: 500, headers, body: JSON.stringify({ error: err.message }) }
+        console.error('[todos] error:', err.message);
+        return {
+            statusCode: 500,
+            headers,
+            body: JSON.stringify({ error: err.message })
+        };
     }
-}
+};
