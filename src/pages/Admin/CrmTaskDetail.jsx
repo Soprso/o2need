@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import {
     ArrowLeft, Flag, Calendar, Clock, CheckCircle2, Circle, XCircle,
-    AlertCircle, Edit2, Save, X, Image as ImageIcon, Loader2, Pencil, Trash2
+    AlertCircle, Edit2, Save, X, Image as ImageIcon, Loader2, Pencil, Trash2,
+    MessageSquare, Send, User
 } from 'lucide-react'
 import { adminFetch, fmtTime, fmt } from './crmUtils'
 import { StatusBadge, PriorityBadge, PRIORITY_COLOR, STATUS_CONFIG } from './CrmTodos'
@@ -16,7 +17,7 @@ const PRIORITY_COLORS = {
 
 const PRIORITY_LABELS = { P1: 'Critical', P2: 'High', P3: 'Medium', P4: 'Low', P5: 'Minimal' }
 
-const CrmTaskDetail = ({ task: initialTask, onBack, onDelete }) => {
+const CrmTaskDetail = ({ task: initialTask, onBack, onDelete, user }) => {
     const [task, setTask] = useState(initialTask)
     const [editMode, setEditMode] = useState(false)
     const [editTitle, setEditTitle] = useState(task.title)
@@ -26,6 +27,10 @@ const CrmTaskDetail = ({ task: initialTask, onBack, onDelete }) => {
     const [deleting, setDeleting] = useState(false)
     const [error, setError] = useState('')
     const [confirmDelete, setConfirmDelete] = useState(false)
+
+    // Comments State
+    const [newComment, setNewComment] = useState('')
+    const [commenting, setCommenting] = useState(false)
 
     const patch = async (fields) => {
         setError('')
@@ -59,6 +64,27 @@ const CrmTaskDetail = ({ task: initialTask, onBack, onDelete }) => {
             setEditMode(false)
         } catch (e) { setError(e.message) }
         finally { setSaving(false) }
+    }
+
+    const handleAddComment = async () => {
+        if (!newComment.trim()) return
+        setCommenting(true)
+        setError('')
+        try {
+            const commentObj = {
+                text: newComment.trim(),
+                user_name: user?.fullName || 'Anonymous Admin',
+                user_email: user?.primaryEmailAddress?.emailAddress || '',
+                created_at: new Date().toISOString()
+            }
+            const updatedComments = [...(task.comments || []), commentObj]
+            await patch({ comments: updatedComments })
+            setNewComment('')
+        } catch (e) {
+            setError(e.message)
+        } finally {
+            setCommenting(false)
+        }
     }
 
     const handleDelete = async () => {
@@ -261,6 +287,63 @@ const CrmTaskDetail = ({ task: initialTask, onBack, onDelete }) => {
                     </div>
                 </div>
             )}
+
+            {/* Comments Section */}
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
+                <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-2 bg-gray-50/50">
+                    <MessageSquare className="w-4 h-4 text-[#14532d]" />
+                    <h3 className="font-heading font-bold text-gray-900 text-sm">Comments & Activity</h3>
+                    <span className="ml-auto bg-gray-200 text-gray-600 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                        {task.comments?.length || 0}
+                    </span>
+                </div>
+
+                <div className="p-5 max-h-[400px] overflow-y-auto space-y-4">
+                    {(!task.comments || task.comments.length === 0) ? (
+                        <div className="text-center py-8">
+                            <p className="text-sm text-gray-400 font-medium">No comments yet.</p>
+                        </div>
+                    ) : (
+                        task.comments.map((c, i) => (
+                            <div key={i} className="flex gap-3">
+                                <div className="w-8 h-8 rounded-full bg-[#14532d]/10 flex-shrink-0 flex items-center justify-center">
+                                    <User className="w-4 h-4 text-[#14532d]" />
+                                </div>
+                                <div className="flex-1 bg-gray-50 rounded-2xl rounded-tl-none px-4 py-3 border border-gray-100 shadow-sm">
+                                    <div className="flex justify-between items-start mb-1">
+                                        <p className="text-xs font-bold text-gray-900">{c.user_name}</p>
+                                        <p className="text-[10px] text-gray-400 font-medium">{fmtTime(c.created_at)}</p>
+                                    </div>
+                                    <p className="text-sm text-gray-700 whitespace-pre-wrap">{c.text}</p>
+                                </div>
+                            </div>
+                        ))
+                    )}
+                </div>
+
+                <div className="p-4 border-t border-gray-100 bg-white">
+                    <div className="flex gap-3">
+                        <textarea
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                            placeholder="Add a comment..."
+                            rows={1}
+                            className="flex-1 text-sm text-gray-700 border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#14532d]/25 focus:border-[#14532d] resize-none"
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleAddComment(); }
+                            }}
+                        />
+                        <button
+                            onClick={handleAddComment}
+                            disabled={commenting || !newComment.trim()}
+                            className="flex-shrink-0 w-10 h-10 bg-[#14532d] text-white rounded-xl shadow-md hover:bg-[#166534] transition-all disabled:opacity-50 flex items-center justify-center hover:scale-[1.05] active:scale-95"
+                        >
+                            {commenting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                        </button>
+                    </div>
+                    <p className="text-[10px] text-gray-400 mt-2 ml-1">Press <kbd className="font-mono bg-gray-100 px-1 rounded">Enter</kbd> to send, <kbd className="font-mono bg-gray-100 px-1 rounded">Shift + Enter</kbd> for new line</p>
+                </div>
+            </div>
 
             {/* Error */}
             {error && (

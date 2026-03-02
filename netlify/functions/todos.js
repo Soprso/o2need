@@ -46,9 +46,14 @@ const CREATE_TABLE_SQL = `
         image_url TEXT,
         created_by_name TEXT,
         created_by_email TEXT,
+        comments JSONB DEFAULT '[]'::jsonb,
         created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
         updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
-    )
+    );
+`;
+
+const ALTER_TABLE_SQL = `
+    ALTER TABLE tasks ADD COLUMN IF NOT EXISTS comments JSONB DEFAULT '[]'::jsonb;
 `;
 
 export const handler = async (event) => {
@@ -62,6 +67,8 @@ export const handler = async (event) => {
     try {
         // Auto-ensure table exists (run this on every request for stability)
         await pool.query(CREATE_TABLE_SQL);
+        // Ensure comments column exists for backwards compat
+        await pool.query(ALTER_TABLE_SQL);
 
         // GET — list all tasks
         if (event.httpMethod === 'GET') {
@@ -79,8 +86,8 @@ export const handler = async (event) => {
             if (!title) return { statusCode: 400, headers, body: JSON.stringify({ error: 'title required' }) };
 
             const r = await pool.query(
-                `INSERT INTO tasks (title, description, priority, image_url, created_by_name, created_by_email)
-                 VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+                `INSERT INTO tasks (title, description, priority, image_url, created_by_name, created_by_email, comments)
+                 VALUES ($1, $2, $3, $4, $5, $6, '[]'::jsonb) RETURNING *`,
                 [title, description || null, priority, image_url || null, created_by_name || null, created_by_email || null]
             );
             return { statusCode: 201, headers, body: JSON.stringify(r.rows[0]) };
@@ -92,7 +99,7 @@ export const handler = async (event) => {
             if (!id) return { statusCode: 400, headers, body: JSON.stringify({ error: 'id required' }) };
 
             const body = JSON.parse(event.body || '{}');
-            const allowed = ['title', 'description', 'priority', 'status', 'image_url'];
+            const allowed = ['title', 'description', 'priority', 'status', 'image_url', 'comments'];
             const sets = [];
             const vals = [];
             let i = 1;

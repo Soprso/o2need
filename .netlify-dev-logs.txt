@@ -89,3 +89,66 @@ Request from ::1: GET /.netlify/functions/todos
 Response with status 200 in 133 ms.
 Request from ::1: GET /.netlify/functions/todos
 Response with status 200 in 136 ms.
+⬥ Reloading redirect rules from [ 'dist/_redirects', 'netlify.toml' ]
+Request from ::1: OPTIONS /.netlify/functions/todos
+Response with status 200 in 4 ms.
+Request from ::1: POST /.netlify/functions/todos
+Response with status 201 in 631 ms.
+Request from ::1: GET /.netlify/functions/todos
+Response with status 200 in 130 ms.
+Request from ::1: GET /.netlify/functions/todos
+Response with status 200 in 125 ms.
+Request from ::1: OPTIONS /.netlify/functions/todos?id=3ae01fbe-e131-4e30-bd4f-c02645dffc44
+Response with status 200 in 4 ms.
+Request from ::1: PATCH /.netlify/functions/todos?id=3ae01fbe-e131-4e30-bd4f-c02645dffc44
+Response with status 200 in 663 ms.
+Request from ::1: OPTIONS /.netlify/functions/todos
+Response with status 200 in 3 ms.
+Request from ::1: OPTIONS /.netlify/functions/todos
+Response with status 200 in 2 ms.
+Request from ::1: GET /.netlify/functions/todos
+Response with status 200 in 595 ms.
+Request from ::1: GET /.netlify/functions/todos
+Response with status 200 in 129 ms.
+Request from ::1: OPTIONS /.netlify/functions/admin-users
+Response with status 200 in 2 ms.
+Request from ::1: OPTIONS /.netlify/functions/admin-users
+Response with status 200 in 2 ms.
+Request from ::1: GET /.netlify/functions/admin-users
+Response with status 200 in 1091 ms.
+Request from ::1: GET /.netlify/functions/admin-users
+Response with status 200 in 625 ms.
+Request from ::1: OPTIONS /.netlify/functions/todos
+Response with status 200 in 3 ms.
+Request from ::1: OPTIONS /.netlify/functions/todos
+Response with status 200 in 7 ms.
+Request from ::1: GET /.netlify/functions/todos
+Response with status 200 in 159 ms.
+Request from ::1: GET /.netlify/functions/todos
+Response with status 200 in 130 ms.
+Request from ::1: OPTIONS /.netlify/functions/todos
+Response with status 200 in 2 ms.
+Request from ::1: OPTIONS /.netlify/functions/todos
+Response with status 200 in 2 ms.
+Request from ::1: GET /.netlify/functions/todos
+Response with status 200 in 611 ms.
+Request from ::1: GET /.netlify/functions/todos
+Response with status 200 in 137 ms.
+Request from ::1: OPTIONS /.netlify/functions/todos
+Response with status 200 in 2 ms.
+Request from ::1: OPTIONS /.netlify/functions/todos
+Response with status 200 in 4 ms.
+Request from ::1: GET /.netlify/functions/todos
+Response with status 200 in 819 ms.
+Request from ::1: GET /.netlify/functions/todos
+Response with status 200 in 123 ms.
+⬥ Reloading function todos...
+⬥ Reloaded function todos
+Request from ::1: GET /.netlify/functions/todos
+Response with status 200 in 13086 ms.
+Request from ::1: OPTIONS /.netlify/functions/todos?id=3ae01fbe-e131-4e30-bd4f-c02645dffc44
+Response with status 200 in 2 ms.
+Request from ::1: PATCH /.netlify/functions/todos?id=3ae01fbe-e131-4e30-bd4f-c02645dffc44
+Response with status 200 in 785 ms.
+Request from ::1: PATCH /.netlify/functions/todos?id=3ae01fbe-e131-4e30-bd4f-c02645dffc44
+Response with status 200 in 207 ms.
