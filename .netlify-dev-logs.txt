@@ -207,3 +207,48 @@ Request from ::1: GET /.netlify/functions/todos
 Response with status 200 in 1272 ms.
 Request from ::1: GET /.netlify/functions/todos
 Response with status 200 in 189 ms.
+Request from ::1: OPTIONS /.netlify/functions/admin-users
+Response with status 200 in 4 ms.
+Request from ::1: OPTIONS /.netlify/functions/admin-users
+Response with status 200 in 3 ms.
+Request from ::1: GET /.netlify/functions/admin-users
+Response with status 200 in 1085 ms.
+Request from ::1: GET /.netlify/functions/admin-users
+Response with status 200 in 543 ms.
+Request from ::1: OPTIONS /.netlify/functions/todos
+Response with status 200 in 6 ms.
+Request from ::1: OPTIONS /.netlify/functions/todos
+Response with status 200 in 2 ms.
+Request from ::1: GET /.netlify/functions/todos
+Response with status 200 in 667 ms.
+Request from ::1: GET /.netlify/functions/todos
+Response with status 200 in 211 ms.
+Request from ::1: GET /.netlify/functions/todos
+Response with status 200 in 227 ms.
+Request from ::1: GET /.netlify/functions/todos
+Response with status 200 in 204 ms.
+Request from ::1: OPTIONS /.netlify/functions/todos
+Response with status 200 in 4 ms.
+Request from ::1: OPTIONS /.netlify/functions/todos
+Response with status 200 in 4 ms.
+Request from ::1: GET /.netlify/functions/todos
+Response with status 200 in 203 ms.
+Request from ::1: GET /.netlify/functions/todos
+Response with status 200 in 192 ms.
+Request from ::1: OPTIONS /.netlify/functions/todos
+Response with status 200 in 2 ms.
+Request from ::1: OPTIONS /.netlify/functions/todos
+Response with status 200 in 2 ms.
+Request from ::1: GET /.netlify/functions/todos
+Response with status 200 in 193 ms.
+Request from ::1: GET /.netlify/functions/todos
+Response with status 200 in 199 ms.
+Request from ::1: OPTIONS /.netlify/functions/todos?id=3ae01fbe-e131-4e30-bd4f-c02645dffc44
+Response with status 200 in 3 ms.
+Request from ::1: PATCH /.netlify/functions/todos?id=3ae01fbe-e131-4e30-bd4f-c02645dffc44
+[todos] error: error in argument for $1: could not parse "{\"{\\\"created_at\\\":\\\"2026-03-02T10:19:07.119Z\\\",\\\"text\\\":\\\"This is a test comment verified directly in the DB!\\\",\\\"user_name\\\":\\\"System Verify\\\"}\",\"{\\\"text\\\":\\\"ok\\\",\\\"user_name\\\":\\\"Shadow Monarch\\\",\\\"user_email\\\":\\\"rshadowmonarch@gmail.com\\\",\\\"created_at\\\":\\\"2026-03-02T12:08:01.047Z\\\"}\"}" as type jsonb: unable to decode JSON: while decoding 287 bytes at offset 146:
+...|stem Verify\"}","{\"text\":\"ok\|...
+...|................^...............|...: stateObjectColon: expecting colon
+Response with status 500 in 2982 ms.
+⬥ Reloading function todos...
+⬥ Reloaded function todos

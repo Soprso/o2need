@@ -104,7 +104,10 @@ export const handler = async (event) => {
             const vals = [];
             let i = 1;
             for (const key of allowed) {
-                if (key in body) { sets.push(`${key} = $${i++}`); vals.push(body[key]); }
+                if (key in body) {
+                    sets.push(`${key} = $${i++}`);
+                    vals.push(key === 'comments' ? JSON.stringify(body[key]) : body[key]);
+                }
             }
             if (!sets.length) return { statusCode: 400, headers, body: JSON.stringify({ error: 'no fields to update' }) };
 
