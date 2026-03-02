@@ -2,7 +2,7 @@ import { useState } from 'react'
 import {
     Lock, Eye, EyeOff, LayoutDashboard, Crown,
     Package, PlusCircle, LogOut, Menu, X, AlertTriangle, ExternalLink,
-    PieChart, IndianRupee
+    PieChart, IndianRupee, ClipboardList
 } from 'lucide-react'
 import CrmDashboard from './CrmDashboard'
 import CrmSubscriptions from './CrmSubscriptions'
@@ -10,6 +10,7 @@ import CrmProductsPage from './CrmProducts'
 import CrmAddProductPage from './CrmAddProduct'
 import CrmSales from './CrmSales'
 import CrmPayouts from './CrmPayouts'
+import CrmTodosContainer from './CrmTodosContainer'
 
 const ADMIN_PASSWORD = 'Mtr@2025'
 
@@ -79,6 +80,7 @@ const NAV = [
     { id: 'subscriptions', label: 'Subscriptions', icon: Crown },
     { id: 'products', label: 'Products', icon: Package },
     { id: 'add-product', label: 'Add Product', icon: PlusCircle },
+    { id: 'todos', label: 'To-Do List', icon: ClipboardList },
 ]
 
 const PAGE_MAP = {
@@ -88,6 +90,7 @@ const PAGE_MAP = {
     subscriptions: CrmSubscriptions,
     products: CrmProductsPage,
     'add-product': CrmAddProductPage,
+    todos: CrmTodosContainer,
 }
 
 // ── CRM Shell ──────────────────────────────────────────────────────────────

@@ -2,7 +2,7 @@
 // Decrements a user's visitsLeft by 1 and records a completion timestamp
 // Called when a gardener marks a visit as completed in the admin CRM
 
-exports.handler = async (event) => {
+export const handler = async (event) => {
     const headers = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'Content-Type, x-admin-token',

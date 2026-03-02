@@ -2,7 +2,7 @@
 // Updates a specific Clerk user's unsafeMetadata
 // Secured by admin token check
 
-exports.handler = async (event) => {
+export const handler = async (event) => {
     const headers = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'Content-Type, x-admin-token',
