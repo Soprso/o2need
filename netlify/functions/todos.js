@@ -14,9 +14,14 @@ const headers = {
     'Content-Type': 'application/json',
 };
 
-// Use Pool to match server.cjs exactly
+// Manually parse DATABASE_URL to avoid casing issues with connectionString property
+const dbUrl = new URL(process.env.DATABASE_URL);
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
+    user: dbUrl.username,
+    password: decodeURIComponent(dbUrl.password),
+    host: dbUrl.hostname,
+    port: dbUrl.port,
+    database: dbUrl.pathname.split('/')[1],
     ssl: {
         rejectUnauthorized: false
     }

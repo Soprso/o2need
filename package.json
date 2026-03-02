@@ -23,7 +23,8 @@
     "replicate": "^1.4.0",
     "tailwind-merge": "^2.3.0",
     "pg": "^8.19.0",
-    "cloudinary": "^2.9.0"
+    "cloudinary": "^2.9.0",
+    "react-is": "^18.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
