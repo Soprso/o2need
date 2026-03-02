@@ -21,7 +21,9 @@
     "react-router-dom": "^6.23.1",
     "recharts": "^3.7.0",
     "replicate": "^1.4.0",
-    "tailwind-merge": "^2.3.0"
+    "tailwind-merge": "^2.3.0",
+    "pg": "^8.19.0",
+    "cloudinary": "^2.9.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
@@ -29,17 +31,10 @@
     "@vitejs/plugin-basic-ssl": "^1.2.0",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.19",
-    "cloudinary": "^2.9.0",
-    "cors": "^2.8.6",
-    "dotenv": "^17.3.1",
-    "eslint": "^8.57.0",
-    "eslint-plugin-react": "^7.34.1",
-    "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
     "express": "^5.2.1",
     "multer": "^2.0.2",
     "multer-storage-cloudinary": "^4.0.0",
-    "pg": "^8.19.0",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",
     "vite": "^5.2.0"

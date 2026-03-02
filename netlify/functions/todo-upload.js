@@ -2,7 +2,7 @@
 // Accepts a base64 image payload and uploads it to Cloudinary
 // Returns { url } on success
 
-const { v2: cloudinary } = require('cloudinary')
+import { v2 as cloudinary } from 'cloudinary'
 
 const ADMIN_TOKEN = process.env.ADMIN_SECRET_TOKEN || 'o2need-admin-secret-2025'
 
@@ -13,7 +13,7 @@ const headers = {
     'Content-Type': 'application/json',
 }
 
-exports.handler = async (event) => {
+export const handler = async (event) => {
     if (event.httpMethod === 'OPTIONS') return { statusCode: 200, headers, body: '' }
     if (event.httpMethod !== 'POST') {
         return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) }
@@ -42,7 +42,7 @@ exports.handler = async (event) => {
 
         return { statusCode: 200, headers, body: JSON.stringify({ url: result.secure_url }) }
     } catch (err) {
-        console.error('todo-upload error:', err)
+        console.error('[todo-upload] error:', err.message)
         return { statusCode: 500, headers, body: JSON.stringify({ error: err.message }) }
     }
 }
