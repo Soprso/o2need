@@ -96,7 +96,7 @@ function App() {
             </Route>
 
             {/* Standalone — password-protected admin panel with Clerk protection */}
-            <Route path="/o2need-control" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
+            <Route path="/o2need-control" element={<AdminPanel />} />
 
             <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

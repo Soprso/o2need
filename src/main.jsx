@@ -17,11 +17,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
         <ClerkProvider
             publishableKey={PUBLISHABLE_KEY}
-            afterSignInUrl="/"
-            afterSignUpUrl="/"
+            fallbackRedirectUrl="/"
             afterSignOutUrl="/"
         >
-            <BrowserRouter>
+            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                 <SubscriptionProvider>
                     <CartProvider>
                         <App />

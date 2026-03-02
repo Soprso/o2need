@@ -14,12 +14,11 @@ const headers = {
     'Content-Type': 'application/json',
 };
 
-// --- DB CONNECTION CONFIG ---
-// We manually parse the DATABASE_URL to strip 'sslmode' which can conflict with the explicit ssl object
+// We manually parse the DATABASE_URL to decode special characters in the password 
+// (e.g., %40 to @) and prevent driver from lowercasing the CockroachDB username "O2need"
 const parseConnectionString = (urlStr) => {
     try {
         const url = new URL(urlStr);
-        // Stripping query params like sslmode=verify-full to avoid pg driver conflicts
         return {
             user: url.username,
             password: decodeURIComponent(url.password),
