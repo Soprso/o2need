@@ -1,9 +1,9 @@
 // Netlify Function: /.netlify/functions/todos
 // CRUD for admin to-do tasks stored in CockroachDB
-// Uses ESM + explicit Client parsing to handle case-sensitive usernames
+// Uses ESM + Pool to match working server.cjs configuration
 
-import pkg from 'pg';
-const { Client } = pkg;
+import pg from 'pg';
+const { Pool } = pg;
 
 const ADMIN_TOKEN = process.env.ADMIN_SECRET_TOKEN || 'o2need-admin-secret-2025';
 
@@ -14,53 +14,15 @@ const headers = {
     'Content-Type': 'application/json',
 };
 
-// Explicitly parse the connection string to handle case sensitivity and special chars
-function makeClient() {
-    const connectionString = process.env.DATABASE_URL;
-    if (!connectionString) {
-        throw new Error('DATABASE_URL environment variable is missing');
+// Use Pool to match server.cjs exactly
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
     }
+});
 
-    try {
-        const url = new URL(connectionString);
-        const config = {
-            user: url.username,
-            password: decodeURIComponent(url.password),
-            host: url.hostname,
-            port: url.port ? parseInt(url.port) : 26257,
-            database: url.pathname.slice(1) || 'defaultdb',
-            ssl: {
-                rejectUnauthorized: false
-            },
-            connectionTimeoutMillis: 10000,
-        };
-
-        console.log(`[todos] Attempting connection as user: "${config.user}" to host: "${config.host}"`);
-        return new Client(config);
-    } catch (e) {
-        console.error('[todos] Failed to parse DATABASE_URL:', e.message);
-        // Fallback to direct string if URL parsing fails
-        return new Client({
-            connectionString,
-            ssl: { rejectUnauthorized: false },
-        });
-    }
-}
-
-async function withDb(fn) {
-    const client = makeClient();
-    try {
-        await client.connect();
-        return await fn(client);
-    } catch (err) {
-        console.error('[todos] DB Connection/Query Error:', err.message);
-        throw err;
-    } finally {
-        await client.end().catch(() => { });
-    }
-}
-
-// Auto-create table on first use
+// Auto-create table logic
 const CREATE_TABLE_SQL = `
     CREATE TABLE IF NOT EXISTS tasks (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -85,12 +47,9 @@ export const handler = async (event) => {
     try {
         // GET — list all tasks
         if (event.httpMethod === 'GET') {
-            const rows = await withDb(async (db) => {
-                await db.query(CREATE_TABLE_SQL);
-                const r = await db.query('SELECT * FROM tasks ORDER BY created_at DESC');
-                return r.rows;
-            });
-            return { statusCode: 200, headers, body: JSON.stringify(rows) };
+            await pool.query(CREATE_TABLE_SQL);
+            const r = await pool.query('SELECT * FROM tasks ORDER BY created_at DESC');
+            return { statusCode: 200, headers, body: JSON.stringify(r.rows) };
         }
 
         // POST — create task
@@ -98,16 +57,13 @@ export const handler = async (event) => {
             const { title, description, priority = 'P3', image_url } = JSON.parse(event.body || '{}');
             if (!title) return { statusCode: 400, headers, body: JSON.stringify({ error: 'title required' }) };
 
-            const row = await withDb(async (db) => {
-                await db.query(CREATE_TABLE_SQL);
-                const r = await db.query(
-                    `INSERT INTO tasks (title, description, priority, image_url)
-                     VALUES ($1, $2, $3, $4) RETURNING *`,
-                    [title, description || null, priority, image_url || null]
-                )
-                return r.rows[0];
-            });
-            return { statusCode: 201, headers, body: JSON.stringify(row) };
+            await pool.query(CREATE_TABLE_SQL);
+            const r = await pool.query(
+                `INSERT INTO tasks (title, description, priority, image_url)
+                 VALUES ($1, $2, $3, $4) RETURNING *`,
+                [title, description || null, priority, image_url || null]
+            );
+            return { statusCode: 201, headers, body: JSON.stringify(r.rows[0]) };
         }
 
         // PATCH — update task
@@ -128,15 +84,12 @@ export const handler = async (event) => {
             sets.push(`updated_at = now()`);
             vals.push(id);
 
-            const row = await withDb(async (db) => {
-                const r = await db.query(
-                    `UPDATE tasks SET ${sets.join(', ')} WHERE id = $${i} RETURNING *`,
-                    vals
-                );
-                return r.rows[0];
-            });
-            if (!row) return { statusCode: 404, headers, body: JSON.stringify({ error: 'not found' }) };
-            return { statusCode: 200, headers, body: JSON.stringify(row) };
+            const r = await pool.query(
+                `UPDATE tasks SET ${sets.join(', ')} WHERE id = $${i} RETURNING *`,
+                vals
+            );
+            if (!r.rows[0]) return { statusCode: 404, headers, body: JSON.stringify({ error: 'not found' }) };
+            return { statusCode: 200, headers, body: JSON.stringify(r.rows[0]) };
         }
 
         // DELETE — remove task
@@ -144,13 +97,11 @@ export const handler = async (event) => {
             const id = event.queryStringParameters?.id;
             if (!id) return { statusCode: 400, headers, body: JSON.stringify({ error: 'id required' }) };
 
-            await withDb(async (db) => {
-                await db.query('DELETE FROM tasks WHERE id = $1', [id]);
-            });
+            await pool.query('DELETE FROM tasks WHERE id = $1', [id]);
             return { statusCode: 200, headers, body: JSON.stringify({ success: true }) };
         }
 
-        return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) }
+        return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) };
 
     } catch (err) {
         console.error('[todos] error:', err.message);
