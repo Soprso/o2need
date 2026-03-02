@@ -5,6 +5,7 @@ import {
     PieChart, IndianRupee, ClipboardList, ShieldCheck, Mail, ArrowRight
 } from 'lucide-react'
 import { useUser, UserButton, SignInButton, useClerk } from '@clerk/clerk-react'
+import { useSearchParams } from 'react-router-dom'
 import CrmDashboard from './CrmDashboard'
 import CrmSubscriptions from './CrmSubscriptions'
 import CrmProductsPage from './CrmProducts'
@@ -149,10 +150,11 @@ const PAGE_MAP = {
 // ── CRM Shell ──────────────────────────────────────────────────────────────
 const CrmShell = ({ onLogout }) => {
     const { user } = useUser()
-    const [active, setActive] = useState('dashboard')
+    const [searchParams, setSearchParams] = useSearchParams()
+    const active = searchParams.get('tab') || 'dashboard'
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
-    const navigate = (id) => { setActive(id); setSidebarOpen(false) }
+    const navigate = (id) => { setSearchParams({ tab: id }); setSidebarOpen(false) }
     const ActivePage = PAGE_MAP[active] || CrmDashboard
 
     const Sidebar = ({ mobile = false }) => (
