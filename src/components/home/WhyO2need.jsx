@@ -11,7 +11,7 @@ const WhyO2need = () => {
             <div className="container mx-auto px-4 max-w-[1200px] flex flex-col gap-24 sm:gap-32">
 
                 {/* ── SECTION 1: Hero Brand Statement ── */}
-                <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
+                <div className="flex flex-col md:flex-row items-start md:items-center gap-12 lg:gap-20">
                     {/* Image Left */}
                     <motion.div
                         initial={{ opacity: 0, y: 40 }}
@@ -40,8 +40,8 @@ const WhyO2need = () => {
                         className="w-full md:w-1/2 space-y-4"
                     >
                         <div className="flex items-center gap-4 sm:gap-0">
-                            <div className="w-[110px] sm:w-[136px] md:w-[160px] shrink-0 flex items-center justify-start overflow-visible">
-                                <img src="/as/logo.png" alt="O2" className="h-16 sm:h-20 md:h-24 w-auto object-contain drop-shadow-sm scale-[2.3] sm:scale-[2.1] origin-left ml-2" />
+                            <div className="w-[130px] sm:w-[136px] md:w-[160px] shrink-0 flex items-center justify-start overflow-visible">
+                                <img src="/as/logo.png" alt="O2" className="h-20 sm:h-20 md:h-24 w-auto object-contain drop-shadow-sm scale-[2.8] sm:scale-[2.1] origin-left ml-2" />
                             </div>
                             <h2 className="text-[#8B4513] font-heading font-black text-4xl sm:text-5xl md:text-[54px] tracking-tighter mt-1 sm:mt-3">
                                 need
