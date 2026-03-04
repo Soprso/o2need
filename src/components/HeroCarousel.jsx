@@ -62,8 +62,8 @@ const HeroCarousel = () => {
             {slides.map((slide, i) => (
                 <div key={i} className={`absolute inset-0 transition-opacity duration-1000 ${i === current ? "opacity-100 z-10" : "opacity-0 z-0"}`}>
 
-                    {/* Fullscreen Image Background on both mobile and desktop with opacity for contrast */}
-                    <img src={slide.image} alt={slide.planName} className="absolute inset-0 w-full h-full object-cover object-center opacity-70" />
+                    {/* Fullscreen Image Background on both mobile and desktop */}
+                    <img src={slide.image} alt={slide.planName} className="absolute inset-0 w-full h-full object-cover object-center" />
 
                     {/* Subtle fade overlay - darker at bottom for text readability on mobile */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 sm:via-transparent to-transparent pointer-events-none" />
@@ -72,7 +72,7 @@ const HeroCarousel = () => {
                     <div className="absolute inset-0 flex flex-col justify-end sm:justify-center z-20 px-4 pb-12 sm:pb-0 sm:px-12 md:px-20">
                         <div
                             onClick={openModal}
-                            className="w-full sm:max-w-xl md:max-w-2xl text-white space-y-2 sm:space-y-4 p-4 sm:p-6 sm:px-10 rounded-2xl sm:rounded-3xl bg-transparent transition-all cursor-pointer mb-2 sm:mb-0"
+                            className="w-full sm:max-w-xl md:max-w-2xl text-white space-y-2 sm:space-y-4 p-4 sm:p-6 sm:px-10 rounded-2xl sm:rounded-3xl bg-black/30 backdrop-blur-md border border-white/10 shadow-xl transition-all cursor-pointer mb-2 sm:mb-0 hover:bg-black/40"
                         >
 
 
