@@ -5,7 +5,6 @@ import { useSubscription } from "../context/SubscriptionContext"
 const slides = [
     {
         image: "/as/gardener1.png",
-        showLogo: true,
         planName: "Starter Plan",
         mrp: 1819,
         price: 1399,
@@ -19,7 +18,6 @@ const slides = [
     },
     {
         image: "/as/img2.png",
-        showLogo: false,
         planName: "Standard Plan",
         mrp: 2599,
         price: 1999,
@@ -33,7 +31,6 @@ const slides = [
     },
     {
         image: "/as/img3.png",
-        showLogo: false,
         planName: "Pro Plan",
         mrp: 3379,
         price: 2599,
@@ -72,10 +69,6 @@ const HeroCarousel = () => {
                             className="w-full sm:max-w-xl md:max-w-2xl text-white space-y-2 sm:space-y-4 p-4 sm:p-6 sm:px-10 rounded-2xl sm:rounded-3xl bg-black/40 sm:bg-black/20 backdrop-blur-md border border-white/20 shadow-2xl transform transition-all cursor-pointer hover:bg-black/50 sm:hover:bg-black/30 mb-2 sm:mb-0"
                         >
 
-                            {/* Logo - Hide on mobile to save space and keep it clean */}
-                            {slide.showLogo && (
-                                <img src="/as/logo.png" alt="O2need Logo" className="hidden sm:block h-10 sm:h-12 mb-2 sm:mb-2 object-contain drop-shadow-lg" />
-                            )}
 
                             {/* Discount Tag */}
                             <div className="inline-flex items-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-1 sm:py-2 bg-red-600 rounded-full text-white font-bold text-[10px] sm:text-sm shadow-[0_0_20px_rgba(220,38,38,0.6)] animate-pulse border border-red-400 tracking-wide uppercase">
