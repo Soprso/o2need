@@ -42,6 +42,12 @@ const slides = [
             "Before & After Garden Service Photos",
         ],
     },
+    {
+        image: "/as/img4.png",
+        planName: '"Mission Organised Vision Build Jungle"',
+        tagline: "Mission Organised Vision Build Jungle",
+        points: [],
+    },
 ]
 
 const HeroCarousel = () => {
@@ -66,27 +72,31 @@ const HeroCarousel = () => {
                     <div className="absolute inset-0 flex flex-col justify-end sm:justify-center z-20 px-4 pb-12 sm:pb-0 sm:px-12 md:px-20">
                         <div
                             onClick={openModal}
-                            className="w-full sm:max-w-xl md:max-w-2xl text-white space-y-2 sm:space-y-4 p-4 sm:p-6 sm:px-10 rounded-2xl sm:rounded-3xl bg-black/40 sm:bg-black/20 backdrop-blur-md border border-white/20 shadow-2xl transform transition-all cursor-pointer hover:bg-black/50 sm:hover:bg-black/30 mb-2 sm:mb-0"
+                            className="w-full sm:max-w-xl md:max-w-2xl text-white space-y-2 sm:space-y-4 p-4 sm:p-6 sm:px-10 rounded-2xl sm:rounded-3xl bg-black/25 sm:bg-black/10 backdrop-blur-md border border-white/20 shadow-2xl transform transition-all cursor-pointer hover:bg-black/50 sm:hover:bg-black/30 mb-2 sm:mb-0"
                         >
 
 
                             {/* Discount Tag */}
-                            <div className="inline-flex items-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-1 sm:py-2 bg-red-600 rounded-full text-white font-bold text-[10px] sm:text-sm shadow-[0_0_20px_rgba(220,38,38,0.6)] animate-pulse border border-red-400 tracking-wide uppercase">
-                                <Tag className="w-3 h-3 sm:w-4 sm:h-4" /> {slide.discount}
-                            </div>
+                            {slide.discount && (
+                                <div className="inline-flex items-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-1 sm:py-2 bg-red-600 rounded-full text-white font-bold text-[10px] sm:text-sm shadow-[0_0_20px_rgba(220,38,38,0.6)] animate-pulse border border-red-400 tracking-wide uppercase self-start">
+                                    <Tag className="w-3 h-3 sm:w-4 sm:h-4" /> {slide.discount}
+                                </div>
+                            )}
 
-                            {/* Plan Name */}
+                            {/* Plan Name / Motto */}
                             <h1 className="text-[20px] leading-tight sm:text-4xl md:text-5xl font-heading font-black sm:leading-tight text-white drop-shadow-xl mt-1 sm:mt-0">
                                 {slide.planName}
                                 {/* Price row: strikethrough MRP + actual price */}
-                                <span className="flex items-baseline gap-2 sm:gap-3 mt-0.5 sm:mt-1 flex-wrap">
-                                    <span className="text-sm sm:text-2xl text-white/50 line-through font-semibold">
-                                        ₹{slide.mrp.toLocaleString('en-IN')}/mo
+                                {slide.price && (
+                                    <span className="flex items-baseline gap-2 sm:gap-3 mt-0.5 sm:mt-1 flex-wrap">
+                                        <span className="text-sm sm:text-2xl text-white/50 line-through font-semibold">
+                                            ₹{slide.mrp?.toLocaleString('en-IN')}/mo
+                                        </span>
+                                        <span className="text-base sm:text-3xl text-green-300 font-black">
+                                            ₹{slide.price?.toLocaleString('en-IN')}/mo
+                                        </span>
                                     </span>
-                                    <span className="text-base sm:text-3xl text-green-300 font-black">
-                                        ₹{slide.price.toLocaleString('en-IN')}/mo
-                                    </span>
-                                </span>
+                                )}
                             </h1>
 
                             {/* Tagline */}
@@ -97,21 +107,23 @@ const HeroCarousel = () => {
                             <div className="w-12 sm:w-20 h-0.5 sm:h-1 bg-green-500 rounded-full hidden sm:block"></div>
 
                             {/* Points List - Show only 2 points highly compact on mobile */}
-                            <ul className="space-y-1 sm:space-y-2 pt-1 sm:pt-1">
-                                {slide.points.slice(0, 2).map((point, idx) => (
-                                    <li key={idx} className="flex items-start gap-1.5 sm:gap-3 text-[11px] sm:text-base text-white/95 font-medium drop-shadow-md">
-                                        <CheckCircle2 className="w-3 h-3 sm:w-5 sm:h-5 text-green-400 flex-shrink-0 drop-shadow mt-0.5" />
-                                        <span>{point}</span>
-                                    </li>
-                                ))}
-                                {/* Desktop only points */}
-                                {slide.points.slice(2).map((point, idx) => (
-                                    <li key={`desktop-${idx}`} className="hidden sm:flex items-start gap-3 text-base text-white/95 font-medium drop-shadow-md">
-                                        <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0 drop-shadow mt-0.5" />
-                                        <span>{point}</span>
-                                    </li>
-                                ))}
-                            </ul>
+                            {slide.points?.length > 0 && (
+                                <ul className="space-y-1 sm:space-y-2 pt-1 sm:pt-1">
+                                    {slide.points.slice(0, 2).map((point, idx) => (
+                                        <li key={idx} className="flex items-start gap-1.5 sm:gap-3 text-[11px] sm:text-base text-white/95 font-medium drop-shadow-md">
+                                            <CheckCircle2 className="w-3 h-3 sm:w-5 sm:h-5 text-green-400 flex-shrink-0 drop-shadow mt-0.5" />
+                                            <span>{point}</span>
+                                        </li>
+                                    ))}
+                                    {/* Desktop only points */}
+                                    {slide.points.slice(2).map((point, idx) => (
+                                        <li key={`desktop-${idx}`} className="hidden sm:flex items-start gap-3 text-base text-white/95 font-medium drop-shadow-md">
+                                            <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0 drop-shadow mt-0.5" />
+                                            <span>{point}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
                         </div>
                     </div>
                 </div>
