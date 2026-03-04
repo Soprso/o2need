@@ -110,17 +110,17 @@ const HeroCarousel = () => {
 
                             <div className="w-12 sm:w-20 h-0.5 sm:h-1 bg-green-500 rounded-full hidden sm:block"></div>
 
-                            {/* Points List - Show only 2 points highly compact on mobile */}
+                            {/* Points List - Show only 1 point on mobile */}
                             {slide.points?.length > 0 && (
                                 <ul className="space-y-1 sm:space-y-2 pt-1 sm:pt-1">
-                                    {slide.points.slice(0, 2).map((point, idx) => (
+                                    {slide.points.slice(0, 1).map((point, idx) => (
                                         <li key={idx} className="flex items-start gap-1.5 sm:gap-3 text-[11px] sm:text-base text-white/95 font-medium drop-shadow-md">
                                             <CheckCircle2 className="w-3 h-3 sm:w-5 sm:h-5 text-green-400 flex-shrink-0 drop-shadow mt-0.5" />
                                             <span>{point}</span>
                                         </li>
                                     ))}
-                                    {/* Desktop only points */}
-                                    {slide.points.slice(2).map((point, idx) => (
+                                    {/* Desktop only points (remainder) */}
+                                    {slide.points.slice(1).map((point, idx) => (
                                         <li key={`desktop-${idx}`} className="hidden sm:flex items-start gap-3 text-base text-white/95 font-medium drop-shadow-md">
                                             <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0 drop-shadow mt-0.5" />
                                             <span>{point}</span>
