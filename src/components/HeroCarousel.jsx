@@ -44,7 +44,7 @@ const slides = [
     },
     {
         image: "/as/img4.png",
-        planName: '"Mission Organised\nVision Build Jungle"',
+        planName: '"Mission - Be Organised\nVision - Build Jungle"',
         tagline: "",
         points: [],
     },
