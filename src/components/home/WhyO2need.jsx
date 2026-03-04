@@ -41,7 +41,7 @@ const WhyO2need = () => {
                     >
                         <div className="flex items-center gap-4 sm:gap-0">
                             <div className="w-[130px] sm:w-[136px] md:w-[160px] shrink-0 flex items-center justify-start overflow-visible">
-                                <img src="/as/logo.png" alt="O2" className="h-20 sm:h-20 md:h-24 w-auto object-contain drop-shadow-sm scale-[2.8] sm:scale-[2.1] origin-left ml-2" />
+                                <img src="/as/logo.png" alt="O2" className="h-20 sm:h-20 md:h-24 w-auto object-contain drop-shadow-sm scale-[2.8] sm:scale-[2.1] origin-left sm:ml-2" />
                             </div>
                             <h2 className="text-[#8B4513] font-heading font-black text-4xl sm:text-5xl md:text-[54px] tracking-tighter mt-1 sm:mt-3">
                                 need
