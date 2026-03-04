@@ -47,7 +47,7 @@ const WhyO2need = () => {
                                 need
                             </h2>
                         </div>
-                        <h3 className="text-[20px] sm:text-[24px] font-bold text-[#14532d] mt-1 sm:mt-2">
+                        <h3 className="text-[32px] sm:text-[42px] font-bold text-[#14532d] mt-1 sm:mt-2">
                             Breathe Life Indoors
                         </h3>
                     </motion.div>
