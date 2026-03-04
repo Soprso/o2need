@@ -44,7 +44,7 @@ const slides = [
     },
     {
         image: "/as/img4.png",
-        planName: '"Mission Organised Vision Build Jungle"',
+        planName: "Mission Organised\nVision Build Jungle",
         tagline: "Mission Organised Vision Build Jungle",
         points: [],
     },
@@ -85,7 +85,9 @@ const HeroCarousel = () => {
 
                             {/* Plan Name / Motto */}
                             <h1 className="text-[20px] leading-tight sm:text-4xl md:text-5xl font-heading font-black sm:leading-tight text-white drop-shadow-xl mt-1 sm:mt-0">
-                                {slide.planName}
+                                {slide.planName.split('\n').map((line, idx) => (
+                                    <span key={idx} className="block">{line}</span>
+                                ))}
                                 {/* Price row: strikethrough MRP + actual price */}
                                 {slide.price && (
                                     <span className="flex items-baseline gap-2 sm:gap-3 mt-0.5 sm:mt-1 flex-wrap">
