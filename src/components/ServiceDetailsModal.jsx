@@ -1,7 +1,7 @@
 import { useEffect, useCallback, useState } from 'react'
 import {
     X, ArrowLeft, Check, X as XMark,
-    Crown, Leaf, Zap, Shield, Phone,
+    Crown, Leaf, Zap, Shield, Phone, User, MapPin,
 } from 'lucide-react'
 import { useSubscription } from '../context/SubscriptionContext'
 
@@ -11,12 +11,20 @@ const ServiceDetailsModal = () => {
 
     const [phone, setPhone] = useState('')
     const [phoneError, setPhoneError] = useState('')
+    const [customerName, setCustomerName] = useState('')
+    const [nameError, setNameError] = useState('')
+    const [customerAddress, setCustomerAddress] = useState('')
+    const [addressError, setAddressError] = useState('')
 
-    // Reset phone whenever modal opens for a new plan
+    // Reset fields whenever modal opens for a new plan
     useEffect(() => {
         if (isOpen) {
             setPhone('')
             setPhoneError('')
+            setCustomerName('')
+            setNameError('')
+            setCustomerAddress('')
+            setAddressError('')
         }
     }, [isOpen])
 
@@ -43,18 +51,38 @@ const ServiceDetailsModal = () => {
 
     // Validate and submit
     const onContinue = () => {
-        const trimmed = phone.trim()
-        const phoneRegex = /^[6-9]\d{9}$/   // Indian mobile number
-        if (!trimmed) {
+        let hasError = false
+
+        const trimmedName = customerName.trim()
+        if (!trimmedName) {
+            setNameError('Please enter your full name.')
+            hasError = true
+        } else {
+            setNameError('')
+        }
+
+        const trimmedAddress = customerAddress.trim()
+        if (!trimmedAddress) {
+            setAddressError('Please enter your service address.')
+            hasError = true
+        } else {
+            setAddressError('')
+        }
+
+        const trimmedPhone = phone.trim()
+        const phoneRegex = /^[6-9]\d{9}$/
+        if (!trimmedPhone) {
             setPhoneError('Please enter your contact number to proceed.')
-            return
-        }
-        if (!phoneRegex.test(trimmed)) {
+            hasError = true
+        } else if (!phoneRegex.test(trimmedPhone)) {
             setPhoneError('Enter a valid 10-digit Indian mobile number.')
-            return
+            hasError = true
+        } else {
+            setPhoneError('')
         }
-        setPhoneError('')
-        handlePayment(selectedPlan, trimmed)
+
+        if (hasError) return
+        handlePayment(selectedPlan, trimmedPhone, trimmedName, trimmedAddress)
     }
 
     const iconStyle = (included) =>
@@ -180,53 +208,133 @@ const ServiceDetailsModal = () => {
                             Visits will be scheduled and our team will contact you soon after the payment is successful. All services are performed by certified garden professionals.
                         </div>
 
-                        {/* ── Phone Number Field ── */}
-                        <div className="mt-5">
-                            <label
-                                htmlFor="sub-phone"
-                                className="block text-sm font-semibold text-text mb-2"
-                            >
-                                Contact Number
-                                <span className="text-red-500 ml-1">*</span>
-                            </label>
-                            <div className="relative">
-                                <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
-                                    <Phone className="w-4 h-4 text-subtext" />
-                                    <span className="text-sm text-subtext font-medium border-r border-gray-200 pr-2">+91</span>
+                        {/* ── Customer Details Fields ── */}
+                        <div className="mt-5 space-y-4">
+
+                            {/* Customer Name */}
+                            <div>
+                                <label htmlFor="sub-name" className="block text-sm font-semibold text-text mb-2">
+                                    Customer Name
+                                    <span className="text-red-500 ml-1">*</span>
+                                </label>
+                                <div className="relative">
+                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                                        <User className="w-4 h-4 text-subtext" />
+                                    </div>
+                                    <input
+                                        id="sub-name"
+                                        type="text"
+                                        value={customerName}
+                                        onChange={(e) => {
+                                            setCustomerName(e.target.value)
+                                            if (nameError) setNameError('')
+                                        }}
+                                        placeholder="Enter your full name"
+                                        className={`
+                                            w-full pl-11 pr-4 py-3.5 text-sm rounded-xl border transition-all duration-200
+                                            focus:outline-none focus:ring-2
+                                            ${nameError
+                                                ? 'border-red-400 bg-red-50 focus:ring-red-300/40 focus:border-red-400'
+                                                : 'border-gray-200 bg-white focus:ring-[#22c55e]/30 focus:border-[#14532d]'
+                                            }
+                                        `}
+                                        disabled={isPaying}
+                                        aria-describedby={nameError ? 'name-error' : undefined}
+                                    />
                                 </div>
-                                <input
-                                    id="sub-phone"
-                                    type="tel"
-                                    inputMode="numeric"
-                                    maxLength={10}
-                                    value={phone}
-                                    onChange={(e) => {
-                                        const val = e.target.value.replace(/\D/g, '')
-                                        setPhone(val)
-                                        if (phoneError) setPhoneError('')
-                                    }}
-                                    placeholder="Enter 10-digit mobile number"
-                                    className={`
-                                        w-full pl-24 pr-4 py-3.5 text-sm rounded-xl border transition-all duration-200
-                                        focus:outline-none focus:ring-2
-                                        ${phoneError
-                                            ? 'border-red-400 bg-red-50 focus:ring-red-300/40 focus:border-red-400'
-                                            : 'border-gray-200 bg-white focus:ring-[#22c55e]/30 focus:border-[#14532d]'
-                                        }
-                                    `}
-                                    disabled={isPaying}
-                                    aria-describedby={phoneError ? 'phone-error' : undefined}
-                                />
+                                {nameError && (
+                                    <p id="name-error" className="mt-1.5 text-xs text-red-500 flex items-center gap-1">
+                                        <XMark className="w-3.5 h-3.5 flex-shrink-0" />
+                                        {nameError}
+                                    </p>
+                                )}
                             </div>
-                            {phoneError && (
-                                <p id="phone-error" className="mt-1.5 text-xs text-red-500 flex items-center gap-1">
-                                    <XMark className="w-3.5 h-3.5 flex-shrink-0" />
-                                    {phoneError}
+
+                            {/* Customer Address */}
+                            <div>
+                                <label htmlFor="sub-address" className="block text-sm font-semibold text-text mb-2">
+                                    Service Address
+                                    <span className="text-red-500 ml-1">*</span>
+                                </label>
+                                <div className="relative">
+                                    <div className="absolute left-4 top-3.5 pointer-events-none">
+                                        <MapPin className="w-4 h-4 text-subtext" />
+                                    </div>
+                                    <textarea
+                                        id="sub-address"
+                                        rows={3}
+                                        value={customerAddress}
+                                        onChange={(e) => {
+                                            setCustomerAddress(e.target.value)
+                                            if (addressError) setAddressError('')
+                                        }}
+                                        placeholder="Enter your full service address"
+                                        className={`
+                                            w-full pl-11 pr-4 py-3.5 text-sm rounded-xl border transition-all duration-200 resize-none
+                                            focus:outline-none focus:ring-2
+                                            ${addressError
+                                                ? 'border-red-400 bg-red-50 focus:ring-red-300/40 focus:border-red-400'
+                                                : 'border-gray-200 bg-white focus:ring-[#22c55e]/30 focus:border-[#14532d]'
+                                            }
+                                        `}
+                                        disabled={isPaying}
+                                        aria-describedby={addressError ? 'address-error' : undefined}
+                                    />
+                                </div>
+                                {addressError && (
+                                    <p id="address-error" className="mt-1.5 text-xs text-red-500 flex items-center gap-1">
+                                        <XMark className="w-3.5 h-3.5 flex-shrink-0" />
+                                        {addressError}
+                                    </p>
+                                )}
+                            </div>
+
+                            {/* Phone Number */}
+                            <div>
+                                <label htmlFor="sub-phone" className="block text-sm font-semibold text-text mb-2">
+                                    Contact Number
+                                    <span className="text-red-500 ml-1">*</span>
+                                </label>
+                                <div className="relative">
+                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
+                                        <Phone className="w-4 h-4 text-subtext" />
+                                        <span className="text-sm text-subtext font-medium border-r border-gray-200 pr-2">+91</span>
+                                    </div>
+                                    <input
+                                        id="sub-phone"
+                                        type="tel"
+                                        inputMode="numeric"
+                                        maxLength={10}
+                                        value={phone}
+                                        onChange={(e) => {
+                                            const val = e.target.value.replace(/\D/g, '')
+                                            setPhone(val)
+                                            if (phoneError) setPhoneError('')
+                                        }}
+                                        placeholder="Enter 10-digit mobile number"
+                                        className={`
+                                            w-full pl-24 pr-4 py-3.5 text-sm rounded-xl border transition-all duration-200
+                                            focus:outline-none focus:ring-2
+                                            ${phoneError
+                                                ? 'border-red-400 bg-red-50 focus:ring-red-300/40 focus:border-red-400'
+                                                : 'border-gray-200 bg-white focus:ring-[#22c55e]/30 focus:border-[#14532d]'
+                                            }
+                                        `}
+                                        disabled={isPaying}
+                                        aria-describedby={phoneError ? 'phone-error' : undefined}
+                                    />
+                                </div>
+                                {phoneError && (
+                                    <p id="phone-error" className="mt-1.5 text-xs text-red-500 flex items-center gap-1">
+                                        <XMark className="w-3.5 h-3.5 flex-shrink-0" />
+                                        {phoneError}
+                                    </p>
+                                )}
+                                <p className="mt-1.5 text-xs text-subtext">
+                                    Our team will use this number to schedule your garden visits.
                                 </p>
-                            )}
-                            <p className="mt-1.5 text-xs text-subtext">
-                                Our team will use this number to schedule your garden visits.
-                            </p>
+                            </div>
+
                         </div>
 
                     </div>
