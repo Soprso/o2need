@@ -39,7 +39,7 @@ const WhyO2need = () => {
                         transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
                         className="w-full md:w-1/2 space-y-4"
                     >
-                        <div className="flex items-center gap-2 sm:gap-0">
+                        <div className="flex items-center gap-3 sm:gap-0">
                             <div className="w-[150px] sm:w-[136px] md:w-[160px] shrink-0 flex items-center justify-start overflow-visible">
                                 <img src="/as/logo.png" alt="O2" className="h-20 sm:h-20 md:h-24 w-auto object-contain drop-shadow-sm scale-[2.8] sm:scale-[2.1] origin-left sm:ml-2" />
                             </div>
@@ -47,7 +47,7 @@ const WhyO2need = () => {
                                 need
                             </h2>
                         </div>
-                        <h3 className="text-[20px] sm:text-[24px] font-medium text-[#2e7d32] mt-1 sm:mt-2">
+                        <h3 className="text-[20px] sm:text-[24px] font-bold text-[#14532d] mt-1 sm:mt-2">
                             Breathe Life Indoors
                         </h3>
                     </motion.div>
