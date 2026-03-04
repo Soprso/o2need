@@ -45,7 +45,7 @@ const slides = [
     {
         image: "/as/img4.png",
         planName: "Mission Organised\nVision Build Jungle",
-        tagline: "Mission Organised Vision Build Jungle",
+        tagline: "",
         points: [],
     },
 ]
@@ -102,9 +102,11 @@ const HeroCarousel = () => {
                             </h1>
 
                             {/* Tagline */}
-                            <p className="text-xs sm:text-lg text-green-50 font-medium italic drop-shadow-md pb-1 sm:pb-0 block">
-                                "{slide.tagline}"
-                            </p>
+                            {slide.tagline && (
+                                <p className="text-xs sm:text-lg text-green-50 font-medium italic drop-shadow-md pb-1 sm:pb-0 block">
+                                    "{slide.tagline}"
+                                </p>
+                            )}
 
                             <div className="w-12 sm:w-20 h-0.5 sm:h-1 bg-green-500 rounded-full hidden sm:block"></div>
 
