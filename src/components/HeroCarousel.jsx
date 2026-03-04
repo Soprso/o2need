@@ -6,10 +6,10 @@ const slides = [
     {
         image: "/as/gardener1.png",
         planName: "Starter Plan",
-        mrp: 1819,
+        mrp: 3000,
         price: 1399,
         tagline: "Clear air, Pure Life.",
-        discount: "HUGE DISCOUNT - SAVE 30%!",
+        discount: "HUGE DISCOUNT - SAVE 53%!",
         points: [
             "2 Expert Visits per Month",
             "Plant Health Analysis & Soil Check",
@@ -19,10 +19,10 @@ const slides = [
     {
         image: "/as/img2.png",
         planName: "Standard Plan",
-        mrp: 2599,
+        mrp: 4500,
         price: 1999,
         tagline: "Professional Care for Your Green Space.",
-        discount: "MOST POPULAR - 30% OFF!",
+        discount: "MOST POPULAR - 55% OFF!",
         points: [
             "3 Expert Visits per Month",
             "Soil Check, Loosening & Creeper Support",
@@ -32,10 +32,10 @@ const slides = [
     {
         image: "/as/img3.png",
         planName: "Pro Plan",
-        mrp: 3379,
+        mrp: 6000,
         price: 2599,
         tagline: "Clear air, Pure Life. Transform your environment.",
-        discount: "PREMIUM PLAN - 30% OFF!",
+        discount: "PREMIUM PLAN - 56% OFF!",
         points: [
             "4 Expert Visits per Month",
             "Full Plant Health & Soil Analysis",
