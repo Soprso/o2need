@@ -65,6 +65,9 @@ const HeroCarousel = () => {
                     {/* Fullscreen Image Background on both mobile and desktop */}
                     <img src={slide.image} alt={slide.planName} className="absolute inset-0 w-full h-full object-cover object-center" />
 
+                    {/* Uniform dark overlay for text highlighting */}
+                    <div className="absolute inset-0 bg-black/30 pointer-events-none" />
+
                     {/* Subtle fade overlay - darker at bottom for text readability on mobile */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 sm:via-transparent to-transparent pointer-events-none" />
 
