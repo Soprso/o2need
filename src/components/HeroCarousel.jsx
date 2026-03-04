@@ -6,45 +6,45 @@ const slides = [
     {
         image: "/as/gardener1.png",
         showLogo: true,
-        heading: "Starter Plan — ₹999/mo",
+        planName: "Starter Plan",
+        mrp: 1819,
+        price: 1399,
         tagline: "Clear air, Pure Life.",
         discount: "HUGE DISCOUNT - SAVE 30%!",
         points: [
             "2 Expert Visits per Month",
             "Plant Health Analysis & Soil Check",
-            "Basic Cutting & Pruning",
-            "Dry Leaf Removal & Watering",
-            "Complete Site Cleaning",
+            "Cutting, Trimming & Bio-Pesticide Spray",
         ],
     },
     {
         image: "/as/img2.png",
         showLogo: false,
-        heading: "Standard Plan — ₹1199/mo",
+        planName: "Standard Plan",
+        mrp: 2599,
+        price: 1999,
         tagline: "Professional Care for Your Green Space.",
-        discount: "MOST POPULAR - 40% OFF!",
+        discount: "MOST POPULAR - 30% OFF!",
         points: [
             "3 Expert Visits per Month",
-            "Comprehensive Health & Soil Check",
-            "Advanced Cutting & Pruning",
-            "Dry Leaf Removal & Watering",
-            "Deep Site Cleaning & Maintenance",
+            "Soil Check, Loosening & Creeper Support",
+            "Cutting, Trimming & Bio-Pesticide Spray",
         ],
     },
     {
         image: "/as/img3.png",
         showLogo: false,
-        heading: "Mission Organised Vision Jungle",
+        planName: "Pro Plan",
+        mrp: 3379,
+        price: 2599,
         tagline: "Clear air, Pure Life. Transform your environment.",
-        discount: "PREMIUM INDOOR COLLECTION",
+        discount: "PREMIUM PLAN - 30% OFF!",
         points: [
-            "Hand-picked for premium aesthetics",
-            "Superior air-purifying varieties",
-            "Expertly nurtured from seed to pot",
-            "Delivered beautifully to your doorstep",
-            "Enhance your living space instantly"
-        ]
-    }
+            "4 Expert Visits per Month",
+            "Full Plant Health & Soil Analysis",
+            "Before & After Garden Service Photos",
+        ],
+    },
 ]
 
 const HeroCarousel = () => {
@@ -60,7 +60,7 @@ const HeroCarousel = () => {
                 <div key={i} className={`absolute inset-0 transition-opacity duration-1000 ${i === current ? "opacity-100 z-10" : "opacity-0 z-0"}`}>
 
                     {/* Fullscreen Image Background on both mobile and desktop */}
-                    <img src={slide.image} alt={slide.heading} className="absolute inset-0 w-full h-full object-cover object-center" />
+                    <img src={slide.image} alt={slide.planName} className="absolute inset-0 w-full h-full object-cover object-center" />
 
                     {/* Subtle fade overlay - darker at bottom for text readability on mobile */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 sm:via-transparent to-transparent pointer-events-none" />
@@ -82,11 +82,17 @@ const HeroCarousel = () => {
                                 <Tag className="w-3 h-3 sm:w-4 sm:h-4" /> {slide.discount}
                             </div>
 
-                            {/* Heading */}
+                            {/* Plan Name */}
                             <h1 className="text-[20px] leading-tight sm:text-4xl md:text-5xl font-heading font-black sm:leading-tight text-white drop-shadow-xl mt-1 sm:mt-0">
-                                {slide.heading.split('—')[0]}
-                                <span className="block text-sm sm:text-2xl mt-0.5 sm:mt-1 text-green-300">
-                                    {slide.heading.split('—')[1] ? `— ${slide.heading.split('—')[1]}` : ''}
+                                {slide.planName}
+                                {/* Price row: strikethrough MRP + actual price */}
+                                <span className="flex items-baseline gap-2 sm:gap-3 mt-0.5 sm:mt-1 flex-wrap">
+                                    <span className="text-sm sm:text-2xl text-white/50 line-through font-semibold">
+                                        ₹{slide.mrp.toLocaleString('en-IN')}/mo
+                                    </span>
+                                    <span className="text-base sm:text-3xl text-green-300 font-black">
+                                        ₹{slide.price.toLocaleString('en-IN')}/mo
+                                    </span>
                                 </span>
                             </h1>
 
