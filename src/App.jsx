@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
+import ScrollToTop from './components/ScrollToTop'
 import { useUser } from '@clerk/clerk-react'
 import MainLayout from './layouts/MainLayout'
 import AdminLayout from './layouts/AdminLayout'
@@ -53,6 +54,8 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
     return (
+        <>
+        <ScrollToTop />
         <Routes>
             <Route element={<MainLayout />}>
                 {/* Public */}
@@ -100,6 +103,7 @@ function App() {
 
             <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        </>
     )
 }
 

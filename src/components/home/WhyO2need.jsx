@@ -4,7 +4,7 @@ import { Check } from 'lucide-react'
 import { useSubscription } from '../../context/SubscriptionContext'
 
 const WhyO2need = () => {
-    const { setStep } = useSubscription()
+    const { openModal } = useSubscription()
 
     return (
         <section className="py-20 overflow-hidden bg-gradient-to-b from-white to-[#f6fff6] font-sans">
@@ -216,7 +216,7 @@ const WhyO2need = () => {
                         <motion.button
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            onClick={() => setStep('plans')}
+                            onClick={openModal}
                             className="bg-[#14532d] hover:bg-[#0a2e18] text-white text-[16px] font-bold px-8 py-4 rounded-xl transition-colors shadow-lg mt-4"
                         >
                             Explore Membership Plans
